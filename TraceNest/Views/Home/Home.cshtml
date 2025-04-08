@@ -1,0 +1,378 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find & Recover - Lost and Found Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .top-nav {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0.5rem 0;
+        }
+
+        .nav-link {
+            color: #212529;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+        }
+
+            .nav-link.active {
+                background-color: #e9ecef;
+                border-radius: 4px;
+            }
+
+        .login-btn {
+            background-color: #e9ecef;
+            color: #212529;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .profile-icon {
+            color: #6f42c1;
+            font-size: 1.5rem;
+        }
+
+        .hero-section {
+            background-color: #f8f9fa;
+            padding: 4rem 0;
+        }
+
+        .main-heading {
+            font-size: 4rem;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+            .main-heading span {
+                display: block;
+            }
+
+        .with-text {
+            color: #0e6621;
+        }
+
+        .ease-text {
+            color: #471d01;
+        }
+
+        .btn-lost {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: none;
+            width: 100%;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-found {
+            background-color: #28a745;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: none;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .icon-container {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lost-icon {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .found-icon {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .image-collage {
+            position: relative;
+            height: 250px;
+            margin-top: 2rem;
+        }
+
+        .collage-image {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: absolute;
+        }
+
+        .image-1 {
+            width: 60%;
+            height: 150px;
+            object-fit: cover;
+            left: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        .image-2 {
+            width: 45%;
+            height: 110px;
+            object-fit: cover;
+            right: 0;
+            top: 40px;
+            z-index: 2;
+        }
+
+        .image-3 {
+            width: 40%;
+            height: 100px;
+            object-fit: cover;
+            right: 25%;
+            bottom: 0;
+            z-index: 3;
+        }
+
+        .footer {
+            background-color: white;
+            padding: 3rem 0;
+            border-top: 1px solid #dee2e6;
+        }
+
+            .footer h5 {
+                font-weight: bold;
+                margin-bottom: 1.2rem;
+            }
+
+            .footer ul {
+                list-style: none;
+                padding-left: 0;
+            }
+
+                .footer ul li {
+                    margin-bottom: 0.5rem;
+                }
+
+                    .footer ul li a {
+                        color: #212529;
+                        text-decoration: none;
+                    }
+
+                        .footer ul li a:hover {
+                            text-decoration: underline;
+                        }
+
+        .copyright {
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            background-color: #e9ecef;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 992px) {
+            .main-heading
+
+        {
+            font-size: 3.5rem;
+        }
+
+        }
+
+        @@media (max-width: 768px) {
+            .main-heading
+
+        {
+            font-size: 3rem;
+        }
+
+        .hero-section {
+            padding: 3rem 0;
+        }
+
+        .image-collage {
+            height: 200px;
+            margin-top: 2rem;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        }
+
+        @@media (max-width: 576px) {
+            .main-heading
+
+        {
+            font-size: 2.5rem;
+        }
+
+        .hero-section {
+            padding: 2rem 0;
+        }
+
+        .image-collage {
+            height: 180px;
+        }
+
+        .nav-link {
+            padding: 0.25rem 0.5rem;
+            margin: 0 0.1rem;
+            font-size: 0.9rem;
+        }
+
+        .login-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="#" class="navbar-brand me-3">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                    </a>
+                    <div class="d-flex">
+                        <a href="" class="nav-link active">Home</a>
+                        <a href="#" class="nav-link">Lost</a>
+                        <a href="#" class="nav-link">Report Lost</a>
+                        <a href="#" class="nav-link">Found</a>
+                        <a href="#" class="nav-link">Report Found</a>
+                        <a href="#" class="nav-link">Profile</a>
+                    </div>
+                </div>
+                <button class="login-btn">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="main-heading mb-3">
+                        Find &<br>
+                        Recover<br>
+                        <span class="with-text">With <span class="ease-text">Ease</span></span>
+                    </h1>
+                    <p class="mb-4">Experience effortless recovery with our dedicated lost and found service.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="action-buttons">
+                        <button class="btn btn-lost mb-3">
+                            <span>Lost</span>
+                            <span class="icon-container"><i class="fas fa-box-open lost-icon"></i></span>
+                        </button>
+                        <button class="btn btn-found">
+                            <span>Found</span>
+                            <span class="icon-container"><i class="fas fa-search found-icon"></i></span>
+                        </button>
+                    </div>
+
+                    <div class="image-collage">
+                        <img src="/images/download.png" alt="Person typing on laptop" class="collage-image image-1">
+                        <img src="/images/images.png" alt="Lost item tag" class="collage-image image-2">
+                        <img src="/images/Screenshot 2024-07-12 at 8.15.26 PM 1.png" alt="Compass" class="collage-image image-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Site</h5>
+                    <ul>
+                        <li><a href="#">Lost</a></li>
+                        <li><a href="#">Report Lost</a></li>
+                        <li><a href="#">Found</a></li>
+                        <li><a href="#">Report Found</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Help</h5>
+                    <ul>
+                        <li><a href="#">Customer Support</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Links</h5>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">You Tube</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Contact</h5>
+                    <p class="mb-1">Tel: +91 9954410108</p>
+                    <p class="mb-3">Email: TrueBlack@gmail.com</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 d-flex justify-content-end">
+                <div class="copyright">
+                    © Copyright 2024 Lost and Found<br>
+                    All Right Reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

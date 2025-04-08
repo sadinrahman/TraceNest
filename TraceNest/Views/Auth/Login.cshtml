@@ -1,0 +1,206 @@
+﻿@model TraceNest.Dto.LoginDto
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Lost and Found</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 10px;
+        }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+        .welcome-card {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            background-color: #212529;
+            border: none;
+        }
+
+        .oauth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #212529;
+        }
+
+            .oauth-btn:hover {
+                background-color: #f1f1f1;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            }
+
+        .oauth-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+            .oauth-divider::before,
+            .oauth-divider::after {
+                content: "";
+                flex: 1;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .oauth-divider span {
+                margin: 0 10px;
+                color: #6c757d;
+            }
+
+        .text-danger ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container py-5">
+        <div class="row g-4 justify-content-center align-items-center">
+            <!-- Left - Welcome Message -->
+            <div class="col-lg-6">
+                <div class="hero-section d-flex align-items-center justify-content-center" style="min-height: 400px;">
+                    <div class="welcome-card text-center">
+                        <h2>Welcome to Lost and Found!</h2>
+                        <p>Quickly report, search, and recover lost items. Our user-friendly platform connects the dots for you.</p>
+                        <p class="mb-0">Happy searching and best of luck!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right - Login Form -->
+            <div class="col-lg-5">
+                <div class="login-form mx-auto">
+                    <h2 class="text-center mb-4">Login</h2>
+
+                    <!-- OAuth Google Login -->
+                    <div class="oauth-buttons mb-3">
+                        <a href="/auth/google" class="oauth-btn">
+                            <img src="https://res.cloudinary.com/djvap1ftu/image/upload/v1743851304/pngimg.com_-_google_PNG19635_zx2z7q.png" alt="Google" width="20" height="20" />
+                            Sign in with Google
+                        </a>
+                    </div>
+
+                    <div class="oauth-divider">
+                        <span>OR</span>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form asp-action="Login" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter your Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <div class="password-container">
+                                <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+                                <span class="password-toggle"><i class="fa fa-eye"></i></span>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a asp-action="Register">Sign up</a></p>
+                    </div>
+
+                    <!-- Display validation summary -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="text-danger mt-3">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password toggle functionality
+        document.querySelector('.password-toggle').addEventListener('click', function () {
+            const passwordInput = document.querySelector('#Password');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>

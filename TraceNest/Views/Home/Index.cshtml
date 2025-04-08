@@ -1,0 +1,338 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find & Recover - Lost and Found Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .hero-section {
+            padding: 5rem 0;
+        }
+
+        .main-heading {
+            font-size: 4rem;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+            .main-heading span {
+                display: block;
+            }
+
+        .with-text {
+            color: black;
+        }
+
+        .ease-text {
+            color: #5e3f18;
+        }
+
+        .recover-text {
+            color: #1a7321;
+        }
+
+        .btn-lost {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: none;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .btn-found {
+            background-color: #28a745;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            border: none;
+            width: 100%;
+        }
+
+        .icon-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lost-icon {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .found-icon {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .image-collage {
+            position: relative;
+            height: 250px;
+            margin-top: 2rem;
+        }
+
+        .collage-image {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: absolute;
+        }
+
+        .image-1 {
+            width: 65%;
+            height: 150px;
+            object-fit: cover;
+            left: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        .image-2 {
+            width: 50%;
+            height: 120px;
+            object-fit: cover;
+            right: 0;
+            top: 30px;
+            z-index: 2;
+        }
+
+        .image-3 {
+            width: 40%;
+            height: 100px;
+            object-fit: cover;
+            right: 20%;
+            bottom: 0;
+            z-index: 3;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 3rem 0;
+        }
+
+            .footer h5 {
+                font-weight: bold;
+                margin-bottom: 1.2rem;
+            }
+
+            .footer ul {
+                list-style: none;
+                padding-left: 0;
+            }
+
+                .footer ul li {
+                    margin-bottom: 0.5rem;
+                }
+
+                    .footer ul li a {
+                        color: #212529;
+                        text-decoration: none;
+                    }
+
+                        .footer ul li a:hover {
+                            text-decoration: underline;
+                        }
+
+        .copyright {
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            background-color: #e9ecef;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .main-heading
+
+        {
+            font-size: 3rem;
+        }
+
+        .hero-section {
+            padding: 3rem 0;
+        }
+
+        .image-collage {
+            height: 200px;
+            margin-top: 2rem;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        }
+
+        @@media (max-width: 576px) {
+            .main-heading
+
+        {
+            font-size: 2.5rem;
+        }
+
+        .hero-section {
+            padding: 2rem 0;
+        }
+
+        .image-collage {
+            height: 180px;
+        }
+
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sign-up, .btn-sign-in {
+            border-radius: 4px;
+            padding: 0.375rem 1rem;
+        }
+
+        .btn-sign-up {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #212529;
+        }
+
+        .btn-sign-in {
+            background-color: #212529;
+            border: 1px solid #212529;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+        <div class="container">
+            <a class="navbar-brand" href="#"></a>
+            <div class="nav-buttons ms-auto">
+                <button class="btn btn-sign-up" onclick="location.href='/Auth/Register'"> Sign Up</button>
+                <button class="btn btn-sign-in" onclick="location.href='/Auth/Login'">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="main-heading">
+                        Find &<br>
+                        Recover<br>
+                        <span class="recover-text">With <span class="ease-text">Ease</span></span>
+                    </h1>
+                    <p class="my-4">Experience effortless recovery with our dedicated lost and found service.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <div class="col-10">
+                            <button class="btn btn-lost" onclick="location.href='/Auth/Login'">Lost</button>
+                        </div>
+                        <div class="col-2 icon-col">
+                            <i class="fas fa-box-open lost-icon"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-10">
+                            <button class="btn btn-found" onclick="location.href='/Auth/Login'">Found</button>
+                        </div>
+                        <div class="col-2 icon-col">
+                            <i class="fas fa-search found-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="image-collage">
+                        <img src="/images/Screenshot 2024-07-12 at 8.15.26 PM 1.png" alt="Person typing on laptop" class="collage-image image-1">
+                        <img src="/images/download.png" alt="Lost item tag" class="collage-image image-2">
+                        <img src="/images/images.png" alt="Compass" class="collage-image image-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Site</h5>
+                    <ul>
+                        <li><a href="#">Lost</a></li>
+                        <li><a href="#">Report Lost</a></li>
+                        <li><a href="#">Found</a></li>
+                        <li><a href="#">Report Found</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Help</h5>
+                    <ul>
+                        <li><a href="#">Customer Support</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Links</h5>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">You Tube</a></li>
+                        <li><a href="#">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
+                    <h5>Contact</h5>
+                    <p>Tel: +91 9954410108</p>
+                    <p>Email: info@lostandfound.com</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-top">
+                <div class="copyright">
+                    © Copyright 2024 Lost and Found<br>
+                    All Rights Reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
