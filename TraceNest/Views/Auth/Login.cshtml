@@ -148,16 +148,16 @@
                     </div>
 
                     <!-- Login Form -->
-                    <form asp-action="Login" method="post">
+                    <form asp-action="Login" method="post" id="loginForm">
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" placeholder="Enter your Email" />
+                            <input asp-for="Email" id="email" class="form-control" placeholder="Enter your Email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Password</label>
                             <div class="password-container">
-                                <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+                                <input asp-for="Password" id="password" class="form-control" type="password" placeholder="Enter your password" />
                                 <span class="password-toggle"><i class="fa fa-eye"></i></span>
                             </div>
                             <span asp-validation-for="Password" class="text-danger"></span>
@@ -202,5 +202,34 @@
             }
         });
     </script>
+    <script>
+               document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/Auth/Login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => {
+                if (!res.ok) return res.json().then(err => { throw err; });
+                return res.json();
+            })
+            .then(data => {
+                
+                window.location.href = '/Home/Home';
+            })
+            .catch(err => {
+                alert(err.message || "Login failed");
+            });
+        });
+
+    </script>
+
 </body>
 </html>

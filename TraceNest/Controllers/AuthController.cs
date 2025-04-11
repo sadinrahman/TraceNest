@@ -22,18 +22,29 @@ namespace TraceNest.Controllers
 		}
 
 		[HttpPost("Login")]
-		public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
+		public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
 		{
 			var result = await _service.Login(loginDto);
 
 			if (!result.Success)
-			{
-				ModelState.AddModelError(string.Empty, result.Message);
-				return View(loginDto);
+			{ 
+				return BadRequest(new { message = result.Message });
 			}
 
-			return RedirectToAction("Index", "Home");
+			var token = result.Data;
+
+			// Set the JWT as an HttpOnly cookie
+			Response.Cookies.Append("AuthToken", token, new CookieOptions
+			{
+				HttpOnly = true,
+				Secure = true, // Use true in production (HTTPS)
+				SameSite = SameSiteMode.Strict,
+				Expires = DateTimeOffset.UtcNow.AddDays(7) // Optional: set expiry
+			});
+
+			return Ok(new { message = "Login successful" });
 		}
+
 
 		[HttpGet("Register")]
 		public IActionResult Register()

@@ -17,5 +17,7 @@ namespace TraceNest.Models
 		public string Password { get; set; }
 		public string Role { get; set; } = "user";
 		public bool IsActive { get; set; } = true;
+		public List<Lost> Losts { get; set; }
+		public List<Found> Founds { get; set; }
 	}
 }

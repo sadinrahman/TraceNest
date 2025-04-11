@@ -1,0 +1,112 @@
+﻿@model List<TraceNest.Dto.LostItemDto>
+
+@{
+    ViewData["Title"] = "Lost Items";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="header">
+        <h1>Lost <span>Items</span></h1>
+    </div>
+
+    <div class="search-container">
+        <div class="search-input">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" id="itemSearchInput" placeholder="Item Name">
+        </div>
+    </div>
+
+    <a href="@Url.Action("ReportLost", "Lost")" class="report-btn mb-4">Report</a>
+
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="location-sidebar">
+                <h5 class="mb-3">Filter</h5>
+
+                <form id="filterForm" method="get" action="@Url.Action("Lost", "Lost")">
+                    <div class="mb-3">
+                        <label class="form-label">Municipality</label>
+                        <select name="municipalityId" class="form-select" asp-items="ViewBag.MunicipalityList">
+                            <option value="">All Municipalities</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="categoryId" class="form-select" asp-items="ViewBag.CategoryList">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Item Grid -->
+        <div class="col-md-9">
+            <div class="row" id="itemsContainer">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4 item-wrapper" data-title="@item.Title.ToLower()">
+                            <div class="item-card">
+                                <div class="item-name p-2>
+                                    @item.Description
+                                </div>
+                                <div class="item-date ps-2">@item.LostDate.ToString("MMM d, yyyy")</div>
+                                <div class="item-image">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="@item.Title" class="img-fluid w-100 h-100 object-fit-cover">
+                                    }
+                                    else
+                                    {
+                                        <div class="item-placeholder">
+                                            <div class="shapes d-flex flex-column align-items-center">
+                                                <div class="triangle"></div>
+                                                <div class="d-flex">
+                                                    <div class="square"></div>
+                                                    <div class="circle"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">@item.Title</div>
+                                    <div class="item-location">@item.Location (@item.Municipality)</div>
+                                    <div class="item-description">@item.Description</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            No lost items found. Please try different search criteria or <a href="@Url.Action("ReportLost", "Lost")">report a lost item</a>.
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Item name search functionality
+            $("#itemSearchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#itemsContainer .item-wrapper").filter(function() {
+                    $(this).toggle($(this).data("title").indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}

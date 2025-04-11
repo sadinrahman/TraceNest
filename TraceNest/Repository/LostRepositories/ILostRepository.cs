@@ -4,6 +4,7 @@ namespace TraceNest.Repository.LostRepositories
 {
 	public interface ILostRepository
 	{
-		bool Add(Lost lost);
+		bool AddAsync(Lost lost);
+		List<Lost> GetAll();
 	}
 }

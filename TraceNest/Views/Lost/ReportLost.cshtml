@@ -1,5 +1,181 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Report Lost Items";
+}
+
+<style>
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        h1 span.lost {
+            color: #560216;
+        }
+
+        h1 span.items {
+            color: #2b580c;
+        }
+
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    .upload-area {
+        border: 2px dashed #ddd;
+        padding: 15px;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+
+        .upload-area:hover {
+            border-color: #aaa;
+        }
+
+    .upload-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #777;
+    }
+
+    .upload-text {
+        display: inline-block;
+        color: #777;
+    }
+
+    .btn-submit {
+        background-color: #2b580c;
+        color: white;
+        padding: 10px 25px;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: #1e3e08;
+            color: white;
+        }
+
+    .btn-reset {
+        background-color: transparent;
+        color: #6c757d;
+        border: 1px solid #6c757d;
+        padding: 10px 25px;
+    }
+
+        .btn-reset:hover {
+            background-color: #f1f1f1;
+        }
+
+    @@media (max-width: 768px) {
+        .form-container {
+            padding: 20px;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <h1><span class="lost">Report</span> <span class="items">Lost Items</span></h1>
+
+        <form asp-action="ReportLost" asp-controller="Lost" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="Title" class="form-label">Name :</label>
+                    <input type="text" class="form-control" id="Title" name="Title" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="location" class="form-label">Location :</label>
+                    <select class="form-select" id="location" name="MunicipalityId" asp-items="ViewBag.MunicipalityList">
+                        <option value="" selected disabled>Select location</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="Category" class="form-label">Category :</label>
+                    <select class="form-select" id="Category" name="CategoryId" asp-items="ViewBag.CategoryList">
+                        <option value="" selected disabled>Select Category</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="date" class="form-label">Date :</label>
+                    <input type="date" class="form-control" id="date" name="LostDate" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="description" class="form-label">Item Description :</label>
+                    <textarea class="form-control" id="description" name="Description" rows="4" required></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="photo" class="form-label">Upload Photo :</label>
+                    <div class="upload-area" onclick="document.getElementById('photo').click()">
+                        <input type="file" id="photo" name="Photo" style="display: none;" accept="image/*">
+                        <span class="upload-text">file.choose</span>
+                        <span class="upload-icon"><i class="fas fa-upload"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-3">
+                    <button type="submit" class="btn btn-submit">Submit</button>
+                    <button type="reset" class="btn btn-reset">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Display selected file name in the upload area
+        document.getElementById('photo').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'file.choose';
+            document.querySelector('.upload-text').textContent = fileName;
+        });
+    </script>
+
 }

@@ -1,11 +1,16 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TraceNest.Data;
+using TraceNest.Helper.CloudinaryHelper;
 using TraceNest.Repository.AuthRepositories;
+using TraceNest.Repository.CategoryRepositories;
 using TraceNest.Repository.LostRepositories;
+using TraceNest.Repository.MunicipalityRepositories;
 using TraceNest.Services.AuthServices;
+using TraceNest.Services.CategoryServices;
 using TraceNest.Services.LostServices;
+using TraceNest.Services.MunicipalityServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +33,23 @@ builder.Services.AddAuthentication("Bearer")
 			ValidAudience = builder.Configuration["Jwt:Audience"],
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 		};
+
+		// 👇 This enables reading token from cookie
+		options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+		{
+			OnMessageReceived = context =>
+			{
+				// Read token from cookie named "AuthToken"
+				var token = context.Request.Cookies["AuthToken"];
+				if (!string.IsNullOrEmpty(token))
+				{
+					context.Token = token;
+				}
+				return Task.CompletedTask;
+			}
+		};
 	});
+
 
 
 
@@ -37,6 +58,11 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILostRepository, LostRepository>();
 builder.Services.AddScoped<ILostService, LostService>();
+builder.Services.AddScoped<IMunicipalityRepository, MunicipalityRepository>();
+builder.Services.AddScoped<IMunicipalityService, MunicipalityService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
 

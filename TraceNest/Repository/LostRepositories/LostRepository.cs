@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client.Extensibility;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensibility;
 using TraceNest.Data;
 using TraceNest.Models;
 
@@ -11,11 +12,18 @@ namespace TraceNest.Repository.LostRepositories
 		{
 			_context = context;
 		}
-		public bool Add(Lost lost)
+		public bool AddAsync(Lost lost)
 		{
 			_context.Add(lost);
+			Console.WriteLine("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 			_context.SaveChanges();
+			Console.WriteLine("hloooooooooooooooooooooooooooooooooooooooooooooooooooo");
 			return true;
+		}
+		public List<Lost> GetAll()
+		{
+			var losts = _context.Losts.Include(c => c.Municipality).Include(y=>y.Category).ToList();
+			return losts;
 		}
 	}
 }
