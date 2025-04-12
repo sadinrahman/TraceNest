@@ -5,10 +5,12 @@ using TraceNest.Data;
 using TraceNest.Helper.CloudinaryHelper;
 using TraceNest.Repository.AuthRepositories;
 using TraceNest.Repository.CategoryRepositories;
+using TraceNest.Repository.FoundRepositories;
 using TraceNest.Repository.LostRepositories;
 using TraceNest.Repository.MunicipalityRepositories;
 using TraceNest.Services.AuthServices;
 using TraceNest.Services.CategoryServices;
+using TraceNest.Services.FoundServices;
 using TraceNest.Services.LostServices;
 using TraceNest.Services.MunicipalityServices;
 
@@ -63,6 +65,9 @@ builder.Services.AddScoped<IMunicipalityService, MunicipalityService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+builder.Services.AddScoped<IFoundRepository, FoundRepository>();
+builder.Services.AddScoped<IFoundService, FoundService>();
+
 
 var app = builder.Build();
 

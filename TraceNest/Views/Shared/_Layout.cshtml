@@ -340,33 +340,33 @@
                 <i class="fas fa-bars"></i>
             </button>
 
-            @* <div class="collapse navbar-collapse" id="navbarNav"> *@
-            @*     <div class="nav-menu-wrapper w-100 d-flex justify-content-between align-items-center"> *@
-            @*         <ul class="navbar-nav"> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="Home" asp-action="Home" class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">Home</a> *@
-            @*             </li> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="Lost" asp-action="Lost" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Lost" ? "active" : "")">Lost</a> *@
-            @*             </li> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="Lost" asp-action="ReportLost" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Lost" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportLost" ? "active" : "")">Report Lost</a> *@
-            @*             </li> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="Found" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" ? "active" : "")">Found</a> *@
-            @*             </li> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="FoundItems" asp-action="ReportFound" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportFound" ? "active" : "")">Report Found</a> *@
-            @*             </li> *@
-            @*             <li class="nav-item"> *@
-            @*                 <a asp-controller="Profile" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")">Profile</a> *@
-            @*             </li> *@
-            @*         </ul> *@
-            @*         <div class="d-flex"> *@
-            @*             <a asp-controller="Account" asp-action="Logout" class="login-btn">Log Out</a> *@
-            @*         </div> *@
-            @*     </div> *@
-            @* </div> *@
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="nav-menu-wrapper w-100 d-flex justify-content-between align-items-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Home" class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Lost" asp-action="Lost" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Lost" ? "active" : "")">Lost</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Lost" asp-action="ReportLost" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Lost" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportLost" ? "active" : "")">Report Lost</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Found" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" ? "active" : "")">Found</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="FoundItems" asp-action="ReportFound" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportFound" ? "active" : "")">Report Found</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Profile" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")">Profile</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a asp-controller="Account" asp-action="Logout" class="login-btn">Log Out</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
