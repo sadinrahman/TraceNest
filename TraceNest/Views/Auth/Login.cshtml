@@ -137,7 +137,7 @@
 
                     <!-- OAuth Google Login -->
                     <div class="oauth-buttons mb-3">
-                        <a href="/auth/google" class="oauth-btn">
+                        <a href="" class="oauth-btn">
                             <img src="https://res.cloudinary.com/djvap1ftu/image/upload/v1743851304/pngimg.com_-_google_PNG19635_zx2z7q.png" alt="Google" width="20" height="20" />
                             Sign in with Google
                         </a>
@@ -189,17 +189,19 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Password toggle functionality
-        document.querySelector('.password-toggle').addEventListener('click', function () {
-            const passwordInput = document.querySelector('#Password');
-            const icon = this.querySelector('i');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+        // Toggle password visibility
+        document.querySelectorAll('.password-toggle').forEach(function (toggle) {
+            toggle.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
         });
     </script>
     <script>

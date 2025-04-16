@@ -1,4 +1,5 @@
-﻿using TraceNest.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TraceNest.Data;
 using TraceNest.Models;
 
 namespace TraceNest.Repository.FoundRepositories
@@ -16,6 +17,11 @@ namespace TraceNest.Repository.FoundRepositories
 			_context.SaveChanges();
 			return true;
 			
+		}
+		public List<Found> GetAll()
+		{
+			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).ToList();
+			return found;
 		}
 
 	}

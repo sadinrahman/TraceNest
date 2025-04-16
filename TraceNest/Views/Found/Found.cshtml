@@ -1,46 +1,44 @@
-﻿@model List<TraceNest.Dto.LostItemDto>
+﻿@model List<TraceNest.Dto.FoundItemDto>
 
 @{
-    ViewData["Title"] = "Lost Items";
+    ViewData["Title"] = "Found Items";
 }
 <style>
     .icon-container {
-        
         height: 30px;
         display: flex;
         justify-content: end;
         align-items: center;
     }
 
-    #button{
-        width:20vw;
-        
+    #button {
+        width: 20vw;
     }
 
-    .ButtonDiv{
+    .ButtonDiv {
         display: flex;
         justify-content: flex-end;
-        margin-top:3vh;
+        margin-top: 3vh;
     }
 </style>
 <div class="container mt-4 mb-5">
     <div class="header">
-        <h1>Lost <span>Items</span></h1>
+        <h1>Found <span>Items</span></h1>
     </div>
 
     <div class="search-container">
         <div class="search-input">
-            
+
             <input type="text" class="form-control" id="itemSearchInput" placeholder="Item Name">
         </div>
     </div>
 
-    
+
     <div class="ButtonDiv">
-        <button onclick="location.href='@Url.Action("ReportLost", "Lost")'" class="btn btn-lost mb-3" id="button">
-        <span>Lost</span>
-        <span class="icon-container"><i class="fas fa-box-open lost-icon"></i></span>
-    </button>
+        <button onclick="location.href='@Url.Action("ReportFound", "Found")'" class="btn btn-found" id="button">
+            <span>Found</span>
+            <span class="icon-container"><i class="fas fa-search found-icon"></i></span>
+        </button>
     </div>
 
     <div class="row">
@@ -49,7 +47,7 @@
             <div class="location-sidebar">
                 <h5 class="mb-3">Filter</h5>
 
-                <form id="filterForm" method="get" action="@Url.Action("Lost", "Lost")">
+                <form id="filterForm" method="get" action="@Url.Action("Found", "Found")">
                     <div class="mb-3">
                         <label class="form-label">Municipality</label>
                         <select name="municipalityId" class="form-select" asp-items="ViewBag.MunicipalityList">
@@ -79,9 +77,9 @@
                         <div class="col-md-6 col-lg-4 mb-4 item-wrapper" data-title="@item.Title.ToLower()">
                             <div class="item-card">
                                 <div class="item-name p-2>
-                                    @item.Description
-                                </div>
-                                <div class="item-date ps-2">@item.LostDate.ToString("MMM d, yyyy")</div>
+                            @item.Description
+                        </div>
+                        <div class="item-date ps-2">@item.FoundDate.ToString("MMM d, yyyy")</div>
                                 <div class="item-image">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
@@ -113,7 +111,7 @@
                 {
                     <div class="col-12">
                         <div class="alert alert-info">
-                            No lost items found. Please try different search criteria or <a href="@Url.Action("ReportLost", "Lost")">report a lost item</a>.
+                            No lost items found. Please try different search criteria or <a href="@Url.Action("ReportFound", "Found")">report a lost item</a>.
                         </div>
                     </div>
                 }

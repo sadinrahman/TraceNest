@@ -353,17 +353,17 @@
                             <a asp-controller="Lost" asp-action="ReportLost" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Lost" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportLost" ? "active" : "")">Report Lost</a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Found" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" ? "active" : "")">Found</a>
+                            <a asp-controller="Found" asp-action="Found" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" ? "active" : "")">Found</a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="FoundItems" asp-action="ReportFound" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportFound" ? "active" : "")">Report Found</a>
+                            <a asp-controller="Found" asp-action="ReportFound" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportFound" ? "active" : "")">Report Found</a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Profile" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")">Profile</a>
                         </li>
                     </ul>
                     <div class="d-flex">
-                        <a asp-controller="Account" asp-action="Logout" class="login-btn">Log Out</a>
+                        <a asp-controller="Auth" asp-action="login" class="login-btn">Log Out</a>
                     </div>
                 </div>
             </div>

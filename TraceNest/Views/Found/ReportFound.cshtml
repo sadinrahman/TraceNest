@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Report Lost Items";
+    ViewData["Title"] = "Report Found Items";
 }
 
 <style>
@@ -105,9 +105,9 @@
 
 <div class="container">
     <div class="form-container">
-        <h1><span class="lost">Report</span> <span class="items">Lost Items</span></h1>
+        <h1><span class="Found">Report</span> <span class="items">Found Items</span></h1>
 
-        <form asp-action="ReportLost" asp-controller="Lost" method="post" enctype="multipart/form-data">
+        <form asp-action="ReportFound" asp-controller="Found" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-12">
                     <label for="Title" class="form-label">Name :</label>
@@ -137,7 +137,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="date" class="form-label">Date :</label>
-                    <input type="date" class="form-control" id="date" name="LostDate" required>
+                    <input type="date" class="form-control" id="date" name="FoundDate" required>
                 </div>
             </div>
 
@@ -169,12 +169,13 @@
     </div>
 </div>
 
-@* @section Scripts { *@
-@*     <script> *@
-@*         // Display selected file name in the upload area *@
-@*         document.getElementById('photo').addEventListener('change', function() { *@
-@*             const fileName = this.files[0]?.name || 'file.choose'; *@
-@*             document.querySelector('.upload-text').textContent = fileName; *@
-@*         }); *@
-@*     </script> *@
-@* } *@
+@section Scripts {
+    <script>
+        // Display selected file name in the upload area
+        document.getElementById('photo').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'file.choose';
+            document.querySelector('.upload-text').textContent = fileName;
+        });
+    </script>
+
+}
