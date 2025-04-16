@@ -22,7 +22,7 @@ namespace TraceNest.Controllers
 		}
 
 		[HttpPost("Login")]
-		public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+		public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
 		{
 			var result = await _service.Login(loginDto);
 
@@ -42,7 +42,7 @@ namespace TraceNest.Controllers
 				Expires = DateTimeOffset.UtcNow.AddDays(7) // Optional: set expiry
 			});
 
-			return Ok(new { message = "Login successful" });
+			return RedirectToAction("Home", "Home");
 		}
 
 

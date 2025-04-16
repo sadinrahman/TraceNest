@@ -169,13 +169,3 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        // Display selected file name in the upload area
-        document.getElementById('photo').addEventListener('change', function() {
-            const fileName = this.files[0]?.name || 'file.choose';
-            document.querySelector('.upload-text').textContent = fileName;
-        });
-    </script>
-
-}
