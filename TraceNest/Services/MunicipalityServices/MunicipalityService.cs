@@ -10,22 +10,21 @@ namespace TraceNest.Services.MunicipalityServices
 		{
 			_repo = repo;
 		}
-		public async Task<bool> AddMunicipality(string MuncipalityName)
-		{
-			var res = new Models.Municipality
-			{
-				MunicipalityName = MuncipalityName
-			};
-			var result = await _repo.AddAsync(res);
-			if (!result)
-			{
-				return false;
-			}
-			return true;
-		}
+		
 		public  List<Municipality> GetAll()
 		{
 			return _repo.GetAllAsync();
+		}
+		public async Task<Guid> AddMuncipality(string MuncipalityName)
+		{
+			var res = new Municipality
+			{
+				MunicipalityName = MuncipalityName
+			};
+			var result = _repo.AddAsync(res);
+			var Id=await _repo.GetCategoryID(MuncipalityName);
+			return Id;
+
 		}
 	}
 }

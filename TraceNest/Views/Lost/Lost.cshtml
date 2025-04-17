@@ -120,3 +120,16 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Item name search functionality
+            $("#itemSearchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#itemsContainer .item-wrapper").filter(function() {
+                    $(this).toggle($(this).data("title").indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}

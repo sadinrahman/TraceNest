@@ -15,5 +15,15 @@ namespace TraceNest.Services.CategoryServices
 			var res = _categoryRepository.GetAllAsync();
 			return res;
 		}
+		public  Guid AddCategoryAsync(string category)
+		{
+			var cat = new Category
+			{
+				CategoryName = category
+			};
+			var res =  _categoryRepository.AddCategoryAsync(cat);
+			var catId = _categoryRepository.GetCategoryID(category);
+			return catId;
+		}
 	}
 }

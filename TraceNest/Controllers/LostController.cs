@@ -24,7 +24,9 @@ namespace TraceNest.Controllers
             _categoryService = categoryService;
         }
         [HttpGet("ReportLost")]
-        public IActionResult ReportLost()
+
+		
+		public IActionResult ReportLost()
         {
             var res =  _ser.GetAll();
 			var category = _categoryService.GetAll();
@@ -34,10 +36,18 @@ namespace TraceNest.Controllers
         }
 		[Authorize]
         [HttpPost("ReportLost")]
-        public IActionResult ReportLost([FromForm]LostAddDto dto,IFormFile Photo)
+        public async Task<IActionResult> ReportLost([FromForm]LostAddDto dto,IFormFile Photo)
         {
 			if (!ModelState.IsValid)
             {
+				Console.WriteLine("something fishy");
+				foreach (var state in ModelState)
+				{
+					foreach (var error in state.Value.Errors)
+					{
+						Console.WriteLine($"Field: {state.Key}, Error: {error.ErrorMessage}");
+					}
+				}
 				Console.WriteLine("Illaaaaaa");
 				var hlo =  _ser.GetAll();
 				var category =  _categoryService.GetAll();
@@ -46,7 +56,20 @@ namespace TraceNest.Controllers
 				return View(dto);
             }
 			Console.WriteLine("Unddddddddddddddd");
-			//var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			if (dto.CategoryId == null && !string.IsNullOrEmpty(dto.CustomCategory))
+			{
+				Console.WriteLine("Keruniillllllaaaaaaaaa");
+				// Save the new category
+				var newCategoryId = _categoryService.AddCategoryAsync(dto.CustomCategory.Trim());
+				dto.CategoryId = newCategoryId;
+			}
+			if (dto.MunicipalityId == null && !string.IsNullOrEmpty(dto.customMunicipality))
+			{
+
+				var newCategoryId = await _ser.AddMuncipality(dto.customMunicipality);
+				dto.MunicipalityId = newCategoryId;
+			}
+			
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userId))
 			{
@@ -55,8 +78,8 @@ namespace TraceNest.Controllers
 				return RedirectToAction("Home", "Home");
 			}
 			else
-			{ 
-				return Unauthorized(); 
+			{
+				return RedirectToAction("Login", "Auth");
 			}
 			
 			

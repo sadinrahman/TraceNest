@@ -1,0 +1,232 @@
+﻿@model TraceNest.Dto.UpdateUser
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .profile-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar li {
+                padding: 12px 20px;
+                border-bottom: 1px solid #f0f0f0;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                .sidebar li:last-child {
+                    border-bottom: none;
+                }
+
+                .sidebar li:hover, .sidebar li.active {
+                    background-color: #f8f8f8;
+                }
+
+                .sidebar li.active {
+                    border-left: 3px solid ;
+                    font-weight: 500;
+                }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            background-color: #e8e2fa;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            .profile-picture i {
+                font-size: 48px;
+                color: black;
+            }
+
+        .profile-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            background-color: #f3f3f3;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+
+            .form-control:focus {
+                border-color: #5a0000;
+                box-shadow: 0 0 0 0.2rem rgba(90, 0, 0, 0.1);
+            }
+
+        .btn-edit {
+            background-color: #ccc;
+            color: #333;
+            padding: 8px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+            .btn-edit:hover {
+                background-color: black;
+                color: white;
+            }
+
+        .profile-details {
+            margin-top: 20px;
+        }
+
+        .detail-row {
+            margin-bottom: 15px;
+        }
+
+        @@media (max-width: 767px) {
+            .sidebar
+
+        {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .sidebar li {
+            flex: 1 0 33%;
+            text-align: center;
+            padding: 10px;
+            border-bottom: none;
+            border-right: 1px solid #f0f0f0;
+        }
+
+            .sidebar li:nth-child(3n) {
+                border-right: none;
+            }
+
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+        }
+
+        }
+
+        /* Additional Enhancement Styles */
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="profile-container">
+                    <h1 class="profile-header">Profile</h1>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="sidebar mb-4">
+                                <ul>
+                                    <li class="active">
+                                        <a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark d-block">Edit Profile</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Profile" asp-action="FoundPost" class="text-decoration-none text-dark d-block">Found Posted <span class="notification-badge"></span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Profile" asp-action="LostPosts" class="text-decoration-none text-dark d-block">Lost Posted <span class="notification-badge"></span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="profile-form">
+                                <form asp-action="Index" asp-controller="Profile" method="post">
+                                    <div class="form-group">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" name="Username" value="@Model.Username" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="Email" value="@Model.Email" />
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-edit">Edit Profile</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

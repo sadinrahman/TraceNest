@@ -22,5 +22,10 @@ namespace TraceNest.Repository.MunicipalityRepositories
 			var result =  _context.Municipality.ToList();
 			return result;
 		}
+		public async Task<Guid> GetCategoryID(string category)
+		{
+			var cat =await _context.Municipality.FirstOrDefaultAsync(x => x.MunicipalityName == category);
+			return cat.Id;
+		}
 	}
 }

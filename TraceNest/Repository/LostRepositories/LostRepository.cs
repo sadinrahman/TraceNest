@@ -15,14 +15,17 @@ namespace TraceNest.Repository.LostRepositories
 		public bool AddAsync(Lost lost)
 		{
 			_context.Add(lost);
-			Console.WriteLine("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 			_context.SaveChanges();
-			Console.WriteLine("hloooooooooooooooooooooooooooooooooooooooooooooooooooo");
 			return true;
 		}
 		public List<Lost> GetAll()
 		{
 			var losts = _context.Losts.Include(c => c.Municipality).Include(y=>y.Category).ToList();
+			return losts;
+		}
+		public List<Lost> GetPostBySpecificUser(Guid userid)
+		{
+			var losts = _context.Losts.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.UserId==userid).ToList();
 			return losts;
 		}
 	}

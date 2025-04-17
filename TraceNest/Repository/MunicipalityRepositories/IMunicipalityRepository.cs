@@ -6,5 +6,6 @@ namespace TraceNest.Repository.MunicipalityRepositories
 	{
 		Task<bool> AddAsync(Municipality municipality);
 		List<Municipality> GetAllAsync();
+		Task<Guid> GetCategoryID(string category);
 	}
 }

@@ -33,30 +33,49 @@ namespace TraceNest.Controllers
 		}
 		[Authorize]
 		[HttpPost("ReportFound")]
-		public IActionResult ReportFound([FromForm] FoundPostDto dto, IFormFile Photo)
+		public async Task<IActionResult> ReportFound([FromForm] FoundPostDto dto, IFormFile Photo)
 		{
 			if (!ModelState.IsValid)
 			{
+				Console.WriteLine("something fishy");
+				foreach (var state in ModelState)
+				{
+					foreach (var error in state.Value.Errors)
+					{
+						Console.WriteLine($"Field: {state.Key}, Error: {error.ErrorMessage}");
+					}
+				}
+
 				var hlo = _ser.GetAll();
 				var category = _categoryService.GetAll();
 				ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 				ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 				return View(dto);
 			}
-
+			Console.WriteLine("hlooooooooooooo");
+			if (dto.CategoryId == null && !string.IsNullOrEmpty(dto.CustomCategory))
+			{
+				Console.WriteLine("Keruniillllllaaaaaaaaa");
+				// Save the new category
+				var newCategoryId = _categoryService.AddCategoryAsync(dto.CustomCategory.Trim());
+				dto.CategoryId = newCategoryId;
+			}
+			if (dto.MunicipalityId == null && !string.IsNullOrEmpty(dto.customMunicipality))
+			{
+				
+				var newCategoryId =await _ser.AddMuncipality(dto.customMunicipality);
+				dto.MunicipalityId = newCategoryId;	
+			}
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userId))
 			{
 				var res = _services.PostFoundProduct(dto, userId, Photo);
-				Console.WriteLine(res);
 				return RedirectToAction("Home", "Home");
 			}
 			else
 			{
-				return Unauthorized();
+				return RedirectToAction("Login", "Auth");
 			}
-
-
 		}
 		[HttpGet("Found")]
 		public IActionResult Found()
@@ -69,6 +88,5 @@ namespace TraceNest.Controllers
 
 			return View(res);
 		}
-
 	}
 }

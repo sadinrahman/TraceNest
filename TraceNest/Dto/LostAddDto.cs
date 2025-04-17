@@ -9,12 +9,13 @@ namespace TraceNest.Dto
 		public string Title { get; set; }
 		[Required]
 		public string Description { get; set; }
-		[Required]
-		public Guid CategoryId { get; set; }
-		[Required]
-		public Guid MunicipalityId { get; set; }
+		
+		public Guid? CategoryId { get; set; }
+		
+		public Guid? MunicipalityId { get; set; }
 		[Required]
 		public DateOnly LostDate { get; set; }
-		
+		public string CustomCategory { get; set; }
+		public string customMunicipality { get; set; }
 	}
 }

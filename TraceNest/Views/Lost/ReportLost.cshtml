@@ -118,9 +118,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="location" class="form-label">Location :</label>
-                    <select class="form-select" id="location" name="MunicipalityId" asp-items="ViewBag.MunicipalityList">
+                    <select class="form-select select2" id="location" name="MunicipalityId" asp-items="ViewBag.MunicipalityList">
                         <option value="" selected disabled>Select location</option>
+                        <option value="">Other</option>
                     </select>
+                    <input type="text" class="form-control mt-2" id="customMunicipality" name="customMunicipality" placeholder="Enter new Municipality" style="display: none;" />
                 </div>
             </div>
 
@@ -128,9 +130,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <label for="Category" class="form-label">Category :</label>
-                    <select class="form-select" id="Category" name="CategoryId" asp-items="ViewBag.CategoryList">
+                    <select class="form-select select2" id="Category" name="CategoryId" asp-items="ViewBag.CategoryList">
                         <option value="" selected disabled>Select Category</option>
+                        <option value="">Other</option>
                     </select>
+                    <input type="text" class="form-control mt-2" id="customCategory" name="CustomCategory" placeholder="Enter new category" style="display: none;" />
                 </div>
             </div>
 
@@ -168,3 +172,40 @@
         </form>
     </div>
 </div>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery (required by Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@section Scripts {
+    <script>
+        // Display selected file name in the upload area
+        document.getElementById('photo').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'file.choose';
+            document.querySelector('.upload-text').textContent = fileName;
+        });
+    </script>
+    <script>
+        document.getElementById("Category").addEventListener("change", function () {
+            let customCategoryInput = document.getElementById("customCategory");
+            customCategoryInput.style.display = this.value === "" ? "block" : "none";
+        });
+    </script>
+    <script>
+        document.getElementById("location").addEventListener("change", function () {
+            let customCategoryInput = document.getElementById("customMunicipality");
+            customCategoryInput.style.display = this.value === "" ? "block" : "none";
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: "Select an option",
+                allowClear: true
+            });
+        });
+    </script>
+}
