@@ -7,5 +7,7 @@ namespace TraceNest.Repository.LostRepositories
 		bool AddAsync(Lost lost);
 		List<Lost> GetAll();
 		List<Lost> GetPostBySpecificUser(Guid userid);
+		bool Update(Lost lost);
+		bool Delete(Lost lost);
 	}
 }

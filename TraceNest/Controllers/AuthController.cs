@@ -71,5 +71,11 @@ namespace TraceNest.Controllers
 			// Registration success
 			return RedirectToAction("Login", "Auth");
 		}
+		public IActionResult LogOut()
+		{
+			Response.Cookies.Delete("AuthToken");
+			Response.Cookies.Delete("refreshToken");
+			return RedirectToAction("Login", "Auth");
+		}
 	}
 }

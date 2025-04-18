@@ -6,5 +6,8 @@ namespace TraceNest.Repository.FoundRepositories
 	{
 		bool Add(Found found);
 		List<Found> GetAll();
+		List<Found> GetPostBySpecificUser(Guid userid);
+		bool Update(Found found);
+		bool Delete(Found found);
 	}
 }

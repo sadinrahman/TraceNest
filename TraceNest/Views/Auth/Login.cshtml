@@ -207,34 +207,7 @@
             });
         });
     </script>
-    @* <script> *@
-    @*            document.getElementById('loginForm').addEventListener('submit', function (e) { *@
-    @*         e.preventDefault(); *@
 
-    @*         const email = document.getElementById('email').value; *@
-    @*         const password = document.getElementById('password').value; *@
-
-    @*         fetch('/Auth/Login', { *@
-    @*             method: 'POST', *@
-    @*             headers: { *@
-    @*                 'Content-Type': 'application/json' *@
-    @*             }, *@
-    @*             body: JSON.stringify({ email, password }) *@
-    @*         }) *@
-    @*         .then(res => { *@
-    @*             if (!res.ok) return res.json().then(err => { throw err; }); *@
-    @*             return res.json(); *@
-    @*         }) *@
-    @*         .then(data => { *@
-                
-    @*             window.location.href = '/Home/Home'; *@
-    @*         }) *@
-    @*         .catch(err => { *@
-    @*             alert(err.message || "Login failed"); *@
-    @*         }); *@
-    @*     }); *@
-
-    @* </script> *@
 
 </body>
 </html>

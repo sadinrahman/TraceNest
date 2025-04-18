@@ -44,7 +44,7 @@ namespace TraceNest.Services.LostServices
 			{
 				result.Add(new LostItemDto
 				{
-
+					Id = item.Id,
 					Title = item.Title,
 					Description = item.Description,
 					LostDate = item.LostDate,
@@ -53,6 +53,56 @@ namespace TraceNest.Services.LostServices
 				});
 			}
 			return result;
+		}
+		public List<LostItemDto> GetPostBySpecificUser(Guid userid)
+		{
+			var res = _repo.GetPostBySpecificUser(userid);
+			var result = new List<LostItemDto>();
+			foreach (var item in res)
+			{
+				result.Add(new LostItemDto
+				{
+					Id = item.Id,
+					Title = item.Title,
+					Description = item.Description,
+					LostDate = item.LostDate,
+					ImageUrl = item.ImageUrl,
+					Municipality = item.Municipality.MunicipalityName,
+					Status = item.Status,
+					Category = item.Category.CategoryName
+				});
+			}
+			return result;
+		}
+		public bool UpdateLost(UpdateLostDto found, Guid userid)
+		{
+			var post = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == found.Id);
+			if (post == null)
+			{
+				return false;
+			}
+			post.Title = found.Title ?? post.Title;
+			post.Description = found.Description ?? post.Description;
+			post.MunicipalityId = found.Municipality ?? post.MunicipalityId;
+			post.CategoryId = found.Category ?? post.CategoryId;
+			post.LostDate = found.LostDate;
+			post.Status = found.Status ?? post.Status;
+			var result = _repo.Update(post);
+			return result;
+		}
+		public bool DeleteLost(Guid id, Guid userid)
+		{
+			var res = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == id);
+			if (res == null)
+			{
+				return false;
+			}
+			var result = _repo.Delete(res);
+			if (!result)
+			{
+				return false;
+			}
+			return true;
 		}
 	}
 }

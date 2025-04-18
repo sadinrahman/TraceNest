@@ -186,18 +186,10 @@
 
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="sidebar mb-4">
-                                <ul>
-                                    <li class="active">
-                                        <a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark d-block">Edit Profile</a>
-                                    </li>
-                                    <li>
-                                        <a asp-controller="Profile" asp-action="FoundPost" class="text-decoration-none text-dark d-block">Found Posted <span class="notification-badge"></span></a>
-                                    </li>
-                                    <li>
-                                        <a asp-controller="Profile" asp-action="LostPosts" class="text-decoration-none text-dark d-block">Lost Posted <span class="notification-badge"></span></a>
-                                    </li>
-                                </ul>
+                            <div class="list-group">
+                                <a href="@Url.Action("Index", "Profile")" class="list-group-item list-group-item-action active">Edit Profile</a>
+                                <a href="@Url.Action("FoundPost", "Profile")" class="list-group-item list-group-item-action">Found Posted</a>
+                                <a href="@Url.Action("LostPosts", "Profile")" class="list-group-item list-group-item-action ">Lost Posted</a>
                             </div>
                         </div>
 

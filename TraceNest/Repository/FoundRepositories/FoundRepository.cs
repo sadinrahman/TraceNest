@@ -20,9 +20,25 @@ namespace TraceNest.Repository.FoundRepositories
 		}
 		public List<Found> GetAll()
 		{
-			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).ToList();
+			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.Status=="Pending").ToList();
 			return found;
 		}
-
+		public List<Found> GetPostBySpecificUser(Guid userid)
+		{
+			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x => x.UserId == userid).ToList();
+			return found;
+		}
+		public bool Update(Found found)
+		{
+			_context.Found.Update(found);
+			_context.SaveChanges();
+			return true;
+		}
+		public bool Delete(Found found)
+		{
+			_context.Found.Remove(found);
+			_context.SaveChanges();
+			return true;
+		}
 	}
 }
