@@ -1,0 +1,635 @@
+﻿@{
+    Layout = null;
+}
+@model IEnumerable<TraceNest.Dto.UserViewDto>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details Admin Panel - List View</title>
+    <!-- Include FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Dark theme colors */
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-table: #252525;
+            --bg-row-hover: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --border: rgba(255, 255, 255, 0.1);
+            /* Sidebar colors */
+            --sidebar-bg: #4a5265;
+            --sidebar-hover: #3a4050;
+            --sidebar-active: #323845;
+            --main-bg: #1e2432;
+            --card-bg: #f8f9fc;
+            --primary-color: #4e73df;
+            --found-color: #36b9cc;
+            --lost-color: #f75de2;
+            --matched-color: #4285f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-left: 250px; /* Make room for sidebar */
+            transition: margin-left 0.3s;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+            .search-bar input {
+                background: transparent;
+                border: none;
+                color: var(--text-primary);
+                font-size: 0.9rem;
+                width: 100%;
+                outline: none;
+                padding: 0.25rem 0;
+            }
+
+                .search-bar input::placeholder {
+                    color: var(--text-secondary);
+                }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            background-color: var(--bg-table);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--bg-secondary);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: var(--bg-row-hover);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .active {
+            background-color: var(--success);
+        }
+
+        .inactive {
+            background-color: var(--danger);
+        }
+
+        .pending {
+            background-color: var(--warning);
+        }
+
+        .password-field {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-password {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0;
+        }
+
+            .toggle-password:hover {
+                color: var(--text-primary);
+            }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background-color: var(--bg-secondary);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.2s;
+        }
+
+            .action-btn:hover {
+                background-color: var(--accent);
+            }
+
+            .action-btn.delete {
+                color: var(--danger);
+            }
+
+                .action-btn.delete:hover {
+                    background-color: var(--danger);
+                    color: white;
+                }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+
+        .page-btn {
+            background-color: var(--bg-secondary);
+            border: none;
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            .page-btn:hover, .page-btn.active {
+                background-color: var(--accent);
+            }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding-top: 20px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 10px 15px 20px;
+            color: #fdb701;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+            .sidebar-header i {
+                margin-right: 10px;
+            }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .sidebar-menu li {
+                margin-bottom: 5px;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                padding: 12px 15px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-size: 0.9rem;
+            }
+
+                .sidebar-menu a:hover {
+                    background-color: var(--sidebar-hover);
+                }
+
+                .sidebar-menu a.active {
+                    background-color: var(--sidebar-active);
+                    border-left: 4px solid #fdb701;
+                }
+
+            .sidebar-menu i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+        /* Toggle Button */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: var(--sidebar-bg);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile Styles */
+        @@media (max-width: 768px) {
+            .container
+
+        {
+            margin-left: 0;
+            padding-top: 70px;
+        }
+
+        .toggle-btn {
+            display: flex;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+        header {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            max-width: 100%;
+        }
+
+        .table-container {
+            display: none;
+        }
+
+        .mobile-view {
+            display: block;
+        }
+
+        }
+
+        @@media (min-width: 769px) {
+            .mobile-view
+
+        {
+            display: none;
+        }
+
+        }
+
+        /* Mobile View - Cards */
+        .mobile-table {
+            display: block;
+        }
+
+        .mobile-row {
+            display: block;
+            background-color: var(--bg-table);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+            .mobile-detail:last-child {
+                border-bottom: none;
+            }
+
+        .detail-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-cube"></i>
+            <span>Admin panel</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="Index">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("UserDetails", "Admin")" class="active">
+                    <i class="fas fa-user"></i>
+                    <span>User details</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("LostProducts", "Admin")">
+                    <i class="fas fa-search"></i>
+                    <span>Lost Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("FoundProducts", "Admin")">
+                    <i class="fas fa-box"></i>
+                    <span>Found Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Matched Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Municipality</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tags"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="container">
+        <header>
+            <h1>User Management</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Search users...">
+            </div>
+        </header>
+
+        <!-- Desktop/Tablet View - Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="user-info">
+                                <div class="avatar">@user.Username.Substring(0, 1).ToUpper()</div>
+                                <div>
+                                    <div class="user-name">@user.Username</div>
+                                </div>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>
+                                <div class="status">
+                                    <span class="status-indicator @(user.IsActive ? "active" : "inactive")"></span>
+                                    @(user.IsActive ? "Active" : "Inactive")
+                                </div>
+                            </td>
+                            <td class="actions">
+                                <button class="action-btn @(user.IsActive ? "block" : "unblock")">
+                                    @if (user.IsActive)
+                                    {
+                                        <i class="fas fa-ban"></i>
+                                        <span> Block</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-unlock"></i>
+                                        <span> Unblock</span>
+                                    }
+                                </button>
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile View - Cards -->
+        <div class="mobile-view">
+            <div class="mobile-table">
+                @foreach (var user in Model)
+                {
+                    <div class="mobile-row">
+                        <div class="mobile-row-header">
+                            <div class="user-info">
+                                <div class="avatar">@user.Username.Substring(0, 1).ToUpper()</div>
+                                <div>
+                                    <div class="user-name">@user.Username</div>
+                                </div>
+                            </div>
+                            <div class="status">
+                                <span class="status-indicator @(user.IsActive ? "active" : "inactive")"></span>
+                                @(user.IsActive ? "Active" : "Inactive")
+                            </div>
+                        </div>
+                        <div class="mobile-detail">
+                            <span class="detail-label">Email:</span>
+                            <span>@user.Email</span>
+                        </div>
+                        <div class="actions" style="margin-top: 1rem;">
+                            <button class="action-btn @(user.IsActive ? "block" : "unblock")">
+                                @if (user.IsActive)
+                                {
+                                    <i class="fas fa-ban"></i>
+                                    <span> Block</span>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-unlock"></i>
+                                    <span> Unblock</span>
+                                }
+                            </button>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+            const mobileRows = document.querySelectorAll('.mobile-row');
+
+            // Filter desktop view
+            tableRows.forEach(row => {
+                const username = row.querySelector('.user-name').textContent.toLowerCase();
+                const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                if (username.includes(searchText) || email.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Filter mobile view
+            mobileRows.forEach(row => {
+                const username = row.querySelector('.user-name').textContent.toLowerCase();
+                const email = row.querySelector('.mobile-detail span:nth-child(2)').textContent.toLowerCase();
+
+                if (username.includes(searchText) || email.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

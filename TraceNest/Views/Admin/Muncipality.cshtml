@@ -1,0 +1,465 @@
+﻿@{
+    Layout = null;
+}
+@model List<TraceNest.Models.Municipality>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraceNest Admin Dashboard - Municipality Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <style>
+        :root {
+            --sidebar-bg: #4a5265;
+            --sidebar-hover: #3a4050;
+            --sidebar-active: #323845;
+            --main-bg: #1e2432;
+            --card-bg: #f8f9fc;
+            --primary-color: #4e73df;
+            --found-color: #36b9cc;
+            --lost-color: #f75de2;
+            --matched-color: #4285f4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--main-bg);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding-top: 20px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 10px 15px 20px;
+            color: #fdb701;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+            .sidebar-header i {
+                margin-right: 10px;
+            }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .sidebar-menu li {
+                margin-bottom: 5px;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                padding: 12px 15px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-size: 0.9rem;
+            }
+
+                .sidebar-menu a:hover {
+                    background-color: var(--sidebar-hover);
+                }
+
+                .sidebar-menu a.active {
+                    background-color: var(--sidebar-active);
+                    border-left: 4px solid #fdb701;
+                }
+
+            .sidebar-menu i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 20px;
+            background-color: var(--card-bg);
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e3e6f0;
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-success {
+            background-color: #1cc88a;
+            border-color: #1cc88a;
+        }
+
+        .btn-danger {
+            background-color: #e74a3b;
+            border-color: #e74a3b;
+        }
+
+        .btn-warning {
+            background-color: #f6c23e;
+            border-color: #f6c23e;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e3e6f0;
+            background-color: var(--card-bg);
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e3e6f0;
+            background-color: var(--card-bg);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+            .search-box i {
+                position: absolute;
+                left: 10px;
+                top: 10px;
+                color: #aaa;
+            }
+
+        .search-input {
+            padding-left: 35px;
+            border-radius: 50px;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+            .loader:after {
+                content: " ";
+                display: block;
+                width: 64px;
+                height: 64px;
+                margin: 8px;
+                border-radius: 50%;
+                border: 6px solid var(--primary-color);
+                border-color: var(--primary-color) transparent var(--primary-color) transparent;
+                animation: loader 1.2s linear infinite;
+            }
+        @@keyframes loader {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 991.98px) {
+            .sidebar
+
+        {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .sidebar-header span, .sidebar-menu span {
+            display: none;
+        }
+
+        .sidebar-menu a {
+            padding: 15px;
+            justify-content: center;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-left: 70px;
+        }
+
+        }
+
+        @@media (max-width: 767.98px) {
+            .main-content
+
+        {
+            margin-left: 0;
+            padding: 15px;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+            .sidebar.active {
+                transform: translateX(0);
+                width: 250px;
+            }
+
+                .sidebar.active .sidebar-header span,
+                .sidebar.active .sidebar-menu span {
+                    display: inline;
+                }
+
+                .sidebar.active .sidebar-menu a {
+                    padding: 12px 15px;
+                    justify-content: flex-start;
+                }
+
+                .sidebar.active .sidebar-menu i {
+                    margin-right: 10px;
+                }
+
+        .toggle-btn {
+            display: block !important;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+        }
+
+        }
+
+        .toggle-btn {
+            display: none;
+            background-color: var(--sidebar-bg);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert-container" id="alertContainer"></div>
+
+    <!-- Mobile Toggle Button -->
+    <button class="toggle-btn" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-cube"></i>
+            <span>Admin panel</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="Index">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="UserDetails">
+                    <i class="fas fa-user"></i>
+                    <span>User details</span>
+                </a>
+            </li>
+            <li>
+                <a href="LostProducts">
+                    <i class="fas fa-search"></i>
+                    <span>Lost Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="FoundProducts">
+                    <i class="fas fa-box"></i>
+                    <span>Found Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Matched Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="active">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Municipality</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tags"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Municipality Management Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold">Municipality Management</h6>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMunicipalityModal">
+                        <i class="fas fa-plus"></i> Add Municipality
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- Search Box -->
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="municipalitySearch" class="form-control search-input" placeholder="Search municipalities...">
+                    </div>
+
+
+
+                    <table id="municipalityTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                               
+                                <th>Municipality Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.MunicipalityName</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning action-btn" data-bs-toggle="modal" data-bs-target="#editMunicipalityModal_@item.Id">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form method="post" asp-action="DeleteMunicipality"  style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this municipality?');">
+                                            <button type="submit" class="btn btn-sm btn-danger action-btn">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <!-- Edit Municipality Modal -->
+                                <div class="modal fade" id="editMunicipalityModal_@item.Id" tabindex="-1" aria-labelledby="editMunicipalityModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="post" asp-action="EditMunicipality">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Edit Municipality</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="Id" value="@item.Id" />
+                                                    <div class="mb-3">
+                                                        <label for="Name" class="form-label">Municipality Name</label>
+                                                        <input type="text" class="form-control" name="Name" value="@item.MunicipalityName" required />
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">Save Changes</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </tbody>
+                    </table>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+
+            // Toggle sidebar on mobile
+            $('#sidebarToggle').on('click', function() {
+                $('.sidebar').toggleClass('active');
+            });
+    </script>
+</body>
+</html>

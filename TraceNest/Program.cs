@@ -9,12 +9,14 @@ using TraceNest.Repository.FoundRepositories;
 using TraceNest.Repository.LostRepositories;
 using TraceNest.Repository.MunicipalityRepositories;
 using TraceNest.Repository.ProfileRepositories;
+using TraceNest.Repository.UserRepositories;
 using TraceNest.Services.AuthServices;
 using TraceNest.Services.CategoryServices;
 using TraceNest.Services.FoundServices;
 using TraceNest.Services.LostServices;
 using TraceNest.Services.MunicipalityServices;
 using TraceNest.Services.ProfileServices;
+using TraceNest.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +73,8 @@ builder.Services.AddScoped<IFoundRepository, FoundRepository>();
 builder.Services.AddScoped<IFoundService, FoundService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

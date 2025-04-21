@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TraceNest.Dto;
 using TraceNest.Services.AuthServices;
 
@@ -42,6 +43,13 @@ namespace TraceNest.Controllers
 				Expires = DateTimeOffset.UtcNow.AddDays(7) // Optional: set expiry
 			});
 
+			var userrole = User.FindFirstValue(ClaimTypes.Role);
+			Console.WriteLine(userrole);
+			if (userrole == "admin")
+			{
+				return RedirectToAction("Index", "Admin");
+			}
+			
 			return RedirectToAction("Home", "Home");
 		}
 

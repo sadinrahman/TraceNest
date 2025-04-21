@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+@model List<TraceNest.Dto.FoundItemDto>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Found Items</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-bg: #4a5265;
+            --sidebar-hover: #3a4050;
+            --sidebar-active: #323845;
+            --lost-color: #f75de2;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #121212;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding-top: 20px;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 10px 15px 20px;
+            color: #fdb701;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+            .sidebar-header i {
+                margin-right: 10px;
+            }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .sidebar-menu li {
+                margin-bottom: 5px;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                padding: 12px 15px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-size: 0.9rem;
+            }
+
+                .sidebar-menu a:hover {
+                    background-color: var(--sidebar-hover);
+                }
+
+                .sidebar-menu a.active {
+                    background-color: var(--sidebar-active);
+                    border-left: 4px solid #fdb701;
+                }
+
+            .sidebar-menu i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
+            }
+
+        /* Content area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: #1e1e1e;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .card-body {
+            color: #e0e0e0;
+        }
+
+        .card-title {
+            color: var(--lost-color);
+            font-weight: 600;
+        }
+
+        .card-text {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-image {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-info-label {
+            font-weight: 500;
+            color: #a0a0a0;
+        }
+
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background-color: rgba(247, 93, 226, 0.2);
+            color: var(--lost-color);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .sidebar
+
+        {
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        .content {
+            margin-left: 0;
+        }
+
+        .toggle-btn {
+            display: block;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-cube"></i>
+            <span>Admin panel</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="@Url.Action("Index", "Admin")">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("UserDetails", "Admin")">
+                    <i class="fas fa-user"></i>
+                    <span>User details</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("LostProducts", "Admin")">
+                    <i class="fas fa-search"></i>
+                    <span>Lost Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("FoundProducts", "Admin")" class="active">
+                    <i class="fas fa-box"></i>
+                    <span>Found Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Matched Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Municipality</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-tags"></i>
+                    <span>Category</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Toggle button for mobile -->
+    <button class="btn btn-primary toggle-btn d-md-none" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container-fluid">
+            <h3 class="text-light mb-4">Found Items</h3>
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+                    <!-- Found Item Card -->
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <img src="@item.ImageUrl" class="card-image" alt="@item.Title">
+                            <div class="card-body">
+                                <span class="status-pill">Found</span>
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text"><span class="card-info-label">Category: </span> @item.Category</p>
+                                <p class="card-text"><span class="card-info-label">Location: </span> @item.Municipality</p>
+                                <p class="card-text"><span class="card-info-label">Found Date: </span> @item.FoundDate</p>
+                                <p class="card-text"><span class="card-info-label">Description: </span> @item.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

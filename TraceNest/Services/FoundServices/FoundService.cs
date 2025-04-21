@@ -48,7 +48,9 @@ namespace TraceNest.Services.FoundServices
 					Description = item.Description,
 					FoundDate = item.FoundDate,
 					ImageUrl = item.ImageUrl,
-					Municipality = item.Municipality.MunicipalityName
+					Municipality = item.Municipality.MunicipalityName,
+					Category = item.Category.CategoryName
+
 				});
 			}
 			return result;
