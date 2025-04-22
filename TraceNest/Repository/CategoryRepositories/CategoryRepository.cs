@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using TraceNest.Data;
 using TraceNest.Models;
 
@@ -11,19 +12,33 @@ namespace TraceNest.Repository.CategoryRepositories
 		{
 			_context = context;
 		}
-		public List<Category> GetAllAsync()
+		public async Task<List<Category>> GetAllAsync()
 		{
-			return _context.Categories.ToList();
+			return await _context.Categories.ToListAsync();
 		}
 		public async Task<bool> AddCategoryAsync(Category category)
 		{
 			await _context.Categories.AddAsync(category);
 			return await _context.SaveChangesAsync() > 0;
 		}
-		public  Guid GetCategoryID(string category)
+		public async Task<Guid> GetCategoryID(string category)
 		{
-			var cat = _context.Categories.FirstOrDefault(x => x.CategoryName == category);
+			var cat =await _context.Categories.FirstOrDefaultAsync(x => x.CategoryName == category);
 			return cat.Id;
+		}
+		public async Task<bool> RemoveCategory(Category category)
+		{
+			_context.Categories.Remove(category);
+			return await _context.SaveChangesAsync() > 0;
+		}
+		public async Task<bool> UpdateCategory(Category category)
+		{
+			_context.Categories.Update(category);
+			return await _context.SaveChangesAsync() > 0;
+		}
+		public async Task<Category> GetCategoryById(Guid id)
+		{
+			return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
 		}
 	}
 }

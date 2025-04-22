@@ -67,12 +67,12 @@ namespace TraceNest.Controllers
 		}
 	
 		[HttpGet("FoundPost")]
-		public IActionResult FoundPost()
+		public async Task<IActionResult> FoundPost()
 		{
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _foundService.GetByUser(userid);
+				var res =await _foundService.GetByUser(userid);
 				return View(res);
 			}
 			return RedirectToAction("Login", "Auth");
@@ -90,17 +90,18 @@ namespace TraceNest.Controllers
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpGet("EditFound")]
-		public IActionResult EditFound(Guid id)
+		public async Task<IActionResult> EditFound(Guid id)
 		{
-			var hlo = _ser.GetAll();
-			var category = _categoryService.GetAll();
+			var hlo =await _ser.GetAll();
+			var category =await _categoryService.GetAll();
 			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _foundService.GetByUser(userid).FirstOrDefault(x=>x.Id==id);
-				return View(res);
+				var res =await _foundService.GetByUser(userid);
+				var result = res.FirstOrDefault(x => x.Id == id);
+				return View(result);
 			}
 			return RedirectToAction("Login", "Auth");
 		}
@@ -117,10 +118,10 @@ namespace TraceNest.Controllers
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpGet("EditLost")]
-		public IActionResult EditLost(Guid id)
+		public async Task<IActionResult> EditLost(Guid id)
 		{
-			var hlo = _ser.GetAll();
-			var category = _categoryService.GetAll();
+			var hlo =await _ser.GetAll();
+			var category =await _categoryService.GetAll();
 			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);

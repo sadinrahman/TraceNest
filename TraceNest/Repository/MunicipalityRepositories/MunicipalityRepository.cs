@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AspNetCoreGeneratedDocument;
+using Microsoft.EntityFrameworkCore;
 using TraceNest.Data;
 using TraceNest.Models;
 
@@ -17,15 +18,30 @@ namespace TraceNest.Repository.MunicipalityRepositories
 			await _context.SaveChangesAsync();
 			return true;
 		}
-		public List<Municipality> GetAllAsync()
+		public async  Task<List<Municipality>> GetAllAsync()
 		{
-			var result =  _context.Municipality.ToList();
+			var result = await _context.Municipality.ToListAsync();
 			return result;
 		}
 		public async Task<Guid> GetCategoryID(string category)
 		{
 			var cat =await _context.Municipality.FirstOrDefaultAsync(x => x.MunicipalityName == category);
 			return cat.Id;
+		}
+		public async Task<bool> RemoveMuncipality(Municipality municipality)
+		{
+			_context.Municipality.Remove(municipality);
+			await _context.SaveChangesAsync();
+			return true;
+		}
+		public async Task<bool> UpdateMunicipality(Municipality category)
+		{
+			 _context.Municipality.Update(category);
+			return await _context.SaveChangesAsync() > 0;
+		}
+		public async  Task<Municipality> GetMunicipalityById(Guid id)
+		{
+			return await _context.Municipality.FirstOrDefaultAsync(x => x.Id == id);
 		}
 	}
 }

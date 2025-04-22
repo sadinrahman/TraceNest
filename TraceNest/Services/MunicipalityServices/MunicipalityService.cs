@@ -1,4 +1,6 @@
-﻿using TraceNest.Models;
+﻿using System.Threading.Tasks;
+using TraceNest.Dto;
+using TraceNest.Models;
 using TraceNest.Repository.MunicipalityRepositories;
 
 namespace TraceNest.Services.MunicipalityServices
@@ -11,9 +13,9 @@ namespace TraceNest.Services.MunicipalityServices
 			_repo = repo;
 		}
 		
-		public  List<Municipality> GetAll()
+		public  async Task<List<Municipality>> GetAll()
 		{
-			return _repo.GetAllAsync();
+			return await _repo.GetAllAsync();
 		}
 		public async Task<Guid> AddMuncipality(string MuncipalityName)
 		{
@@ -21,9 +23,29 @@ namespace TraceNest.Services.MunicipalityServices
 			{
 				MunicipalityName = MuncipalityName
 			};
-			var result = _repo.AddAsync(res);
+			var result = await _repo.AddAsync(res);
 			var Id=await _repo.GetCategoryID(MuncipalityName);
 			return Id;
+
+		}
+		public async Task<bool> RemoveMuncipality(Guid id)
+		{
+			var municipality =await _repo.GetMunicipalityById(id);
+			if (municipality == null)
+			{
+				return false;
+			}
+			return await _repo.RemoveMuncipality(municipality);
+		}
+		public async Task<bool> UpdateMunicipality(MuncipalityDto municipality)
+		{
+			var res =await _repo.GetMunicipalityById(municipality.Id);
+			if (res == null)
+			{
+				return false;
+			}
+			res.MunicipalityName = municipality.Name;
+			return await _repo.UpdateMunicipality(res);
 
 		}
 	}

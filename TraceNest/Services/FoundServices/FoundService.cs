@@ -1,4 +1,5 @@
-﻿using TraceNest.Dto;
+﻿using System.Threading.Tasks;
+using TraceNest.Dto;
 using TraceNest.Helper.CloudinaryHelper;
 using TraceNest.Models;
 using TraceNest.Repository.FoundRepositories;
@@ -15,7 +16,7 @@ namespace TraceNest.Services.FoundServices
 			_repo = repo;
 			_service = service;
 		}
-		public bool PostFoundProduct(FoundPostDto dto, Guid userid, IFormFile Image)
+		public async Task<bool> PostFoundProduct(FoundPostDto dto, Guid userid, IFormFile Image)
 		{
 			var photo = _service.UploadImage(Image);
 			var res = new Found
@@ -28,16 +29,16 @@ namespace TraceNest.Services.FoundServices
 				MunicipalityId = dto.MunicipalityId,
 				CategoryId = dto.CategoryId
 			};
-			var result = _repo.Add(res);
+			var result =await _repo.Add(res);
 			if (!result)
 			{
 				return false;
 			}
 			return true;
 		}
-		public List<FoundItemDto> GetAll()
+		public async Task<List<FoundItemDto>> GetAll()
 		{
-			var res = _repo.GetAll();
+			var res =await _repo.GetAll();
 			var result = new List<FoundItemDto>();
 			foreach (var item in res)
 			{
@@ -55,9 +56,9 @@ namespace TraceNest.Services.FoundServices
 			}
 			return result;
 		}
-		public List<FoundItemDto> GetByUser(Guid userid)
+		public async Task<List<FoundItemDto>> GetByUser(Guid userid)
 		{
-			var res = _repo.GetPostBySpecificUser(userid);
+			var res =await _repo.GetPostBySpecificUser(userid);
 			var result = new List<FoundItemDto>();
 			foreach (var item in res)
 			{
@@ -75,10 +76,12 @@ namespace TraceNest.Services.FoundServices
 			}
 			return result;
 		}
-		public bool UpdateFound(UpdateFoundDto found, Guid userid)
+		public async Task<bool> UpdateFound(UpdateFoundDto found, Guid userid)
 		{
-			var post = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == found.Id);
-			if(post == null)
+			var posts = await _repo.GetPostBySpecificUser(userid);
+			var post = posts.FirstOrDefault(x => x.Id == found.Id);
+
+			if (post == null)
 			{
 				return false;
 			}
@@ -88,17 +91,18 @@ namespace TraceNest.Services.FoundServices
 			post.CategoryId = found.Category ?? post.CategoryId;
 			post.FoundDate = found.FoundDate;
 			post.Status = found.Status ?? post.Status;
-			var result = _repo.Update(post);
+			var result =await _repo.Update(post);
 			return result;
 		}
-		public bool DeleteLost(Guid id, Guid userid)
+		public async Task<bool> DeleteLost(Guid id, Guid userid)
 		{
-			var res = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == id);
+			var ress = await _repo.GetPostBySpecificUser(userid);
+			var res = ress.FirstOrDefault(x => x.Id == id);
 			if (res == null)
 			{
 				return false;
 			}
-			var result = _repo.Delete(res);
+			var result = await _repo.Delete(res);
 			if (!result)
 			{
 				return false;

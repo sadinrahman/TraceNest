@@ -4,7 +4,7 @@ namespace TraceNest.Services.LostServices
 {
 	public interface ILostService
 	{
-		public bool PostLostProduct(LostAddDto dto, Guid userid, IFormFile Image);
+		bool PostLostProduct(LostAddDto dto, Guid userid, IFormFile Image);
 		List<LostItemDto> GetAll();
 		List<LostItemDto> GetPostBySpecificUser(Guid userid);
 		bool UpdateLost(UpdateLostDto found, Guid userid);

@@ -40,7 +40,7 @@ namespace TraceNest.Controllers
 				HttpOnly = true,
 				Secure = true, // Use true in production (HTTPS)
 				SameSite = SameSiteMode.Strict,
-				Expires = DateTimeOffset.UtcNow.AddDays(7) // Optional: set expiry
+				Expires = DateTimeOffset.UtcNow.AddHours(5) // Optional: set expiry
 			});
 
 			var userrole = User.FindFirstValue(ClaimTypes.Role);

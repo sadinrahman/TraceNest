@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using TraceNest.Dto;
 using TraceNest.Models;
 using TraceNest.Repository.MunicipalityRepositories;
@@ -26,10 +27,10 @@ namespace TraceNest.Controllers
         [HttpGet("ReportLost")]
 
 		
-		public IActionResult ReportLost()
+		public async Task<IActionResult> ReportLost()
         {
-            var res =  _ser.GetAll();
-			var category = _categoryService.GetAll();
+            var res = await _ser.GetAll();
+			var category =await _categoryService.GetAll();
             ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 			ViewBag.MunicipalityList = new SelectList(res, "Id", "MunicipalityName");
 			return View();
@@ -49,8 +50,8 @@ namespace TraceNest.Controllers
 					}
 				}
 				Console.WriteLine("Illaaaaaa");
-				var hlo =  _ser.GetAll();
-				var category =  _categoryService.GetAll();
+				var hlo = await _ser.GetAll();
+				var category =await  _categoryService.GetAll();
 				ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 				ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 				return View(dto);
@@ -60,7 +61,7 @@ namespace TraceNest.Controllers
 			{
 				Console.WriteLine("Keruniillllllaaaaaaaaa");
 				// Save the new category
-				var newCategoryId = _categoryService.AddCategoryAsync(dto.CustomCategory.Trim());
+				var newCategoryId =await _categoryService.AddCategoryAsync(dto.CustomCategory.Trim());
 				dto.CategoryId = newCategoryId;
 			}
 			if (dto.MunicipalityId == null && !string.IsNullOrEmpty(dto.customMunicipality))
@@ -85,10 +86,10 @@ namespace TraceNest.Controllers
 			
 		}
 		[HttpGet("Lost")]
-		public   IActionResult Lost()
+		public   async Task<IActionResult> Lost()
 		{
-			var hlo =  _ser.GetAll();
-			var category =  _categoryService.GetAll();
+			var hlo =await  _ser.GetAll();
+			var category =await  _categoryService.GetAll();
 			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 			var res=_services.GetAll();

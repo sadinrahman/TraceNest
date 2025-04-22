@@ -4,10 +4,10 @@ namespace TraceNest.Repository.FoundRepositories
 {
 	public interface IFoundRepository
 	{
-		bool Add(Found found);
-		List<Found> GetAll();
-		List<Found> GetPostBySpecificUser(Guid userid);
-		bool Update(Found found);
-		bool Delete(Found found);
+		Task<bool> Add(Found found);
+		Task<List<Found>> GetAll();
+		Task<List<Found>> GetPostBySpecificUser(Guid userid);
+		Task<bool> Update(Found found);
+		Task<bool> Delete(Found found);
 	}
 }

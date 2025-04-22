@@ -4,8 +4,11 @@ namespace TraceNest.Repository.CategoryRepositories
 {
 	public interface ICategoryRepository
 	{
-		List<Category> GetAllAsync();
+		Task<List<Category>> GetAllAsync();
 		Task<bool> AddCategoryAsync(Category category);
-		Guid GetCategoryID(string category);
+		Task<Guid> GetCategoryID(string category);
+		Task<bool> RemoveCategory(Category category);
+		Task<bool> UpdateCategory(Category category);
+		Task<Category> GetCategoryById(Guid id);
 	}
 }

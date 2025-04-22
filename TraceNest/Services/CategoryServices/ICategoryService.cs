@@ -1,10 +1,13 @@
-﻿using TraceNest.Models;
+﻿using TraceNest.Dto;
+using TraceNest.Models;
 
 namespace TraceNest.Services.CategoryServices
 {
 	public interface ICategoryService
 	{
-		List<Category> GetAll();
-		Guid AddCategoryAsync(string category);
+		Task<List<Category>> GetAll();
+		Task<Guid> AddCategoryAsync(string category);
+		Task<bool> RemoveCategory(Guid id);
+		Task<bool> UpdateMunicipality(CategoryDto category);
 	}
 }

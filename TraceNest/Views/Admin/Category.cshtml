@@ -320,25 +320,25 @@
         </div>
         <ul class="sidebar-menu">
             <li>
-                <a href="Index">
+                <a href="@Url.Action("Index", "Admin")">
                     <i class="fas fa-th-large"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="UserDetails">
+                <a href="@Url.Action("UserDetails", "Admin")">
                     <i class="fas fa-user"></i>
                     <span>User details</span>
                 </a>
             </li>
             <li>
-                <a href="LostProducts">
+                <a href="@Url.Action("LostProducts", "Admin")">
                     <i class="fas fa-search"></i>
                     <span>Lost Products</span>
                 </a>
             </li>
             <li>
-                <a href="FoundProducts">
+                <a href="@Url.Action("FoundProducts", "Admin")">
                     <i class="fas fa-box"></i>
                     <span>Found Products</span>
                 </a>
@@ -350,13 +350,13 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="active">
+                <a href="@Url.Action("Muncipality", "Admin")">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>Municipality</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="@Url.Action("Category", "Admin")" class="active">
                     <i class="fas fa-tags"></i>
                     <span>Category</span>
                 </a>
@@ -370,17 +370,41 @@
             <!-- Municipality Management Card -->
             <div class="card">
                 <div class="card-header">
-                    <h6 class="m-0 font-weight-bold">Municipality Management</h6>
+                    <h6 class="m-0 font-weight-bold">Category Management</h6>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMunicipalityModal">
-                        <i class="fas fa-plus"></i> Add Municipality
+                        <i class="fas fa-plus"></i> Add Category
                     </button>
+                    <!-- Add Municipality Modal -->
+                    <div class="modal fade" id="addMunicipalityModal" tabindex="-1" aria-labelledby="addMunicipalityModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" asp-action="AddCategory">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add Category</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Category Name</label>
+                                            <input type="text" class="form-control" name="category" required />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <!-- Search Box -->
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="municipalitySearch" class="form-control search-input" placeholder="Search municipalities...">
+                        <input type="text" class="form-control search-input" id="categorySearch" placeholder="Search Category...">
                     </div>
+                </div>
 
 
 
@@ -388,7 +412,7 @@
                         <thead>
                             <tr>
 
-                                <th>Municipality Name</th>
+                                <th>Category Name</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -401,7 +425,8 @@
                                         <button class="btn btn-sm btn-warning action-btn" data-bs-toggle="modal" data-bs-target="#editMunicipalityModal_@item.Id">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form method="post" asp-action="DeleteMunicipality" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this municipality?');">
+                                        <form method="post" asp-action="DeleteCategory" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this municipality?');">
+                                        <input type="hidden" name="id" value="@item.Id" />
                                             <button type="submit" class="btn btn-sm btn-danger action-btn">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -409,30 +434,31 @@
                                     </td>
                                 </tr>
 
-                                <!-- Edit Municipality Modal -->
-                                <div class="modal fade" id="editMunicipalityModal_@item.Id" tabindex="-1" aria-labelledby="editMunicipalityModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form method="post" asp-action="EditMunicipality">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Category</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                
+                            <!-- Edit Category Modal -->
+                            <div class="modal fade" id="editMunicipalityModal_@item.Id" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="post" asp-action="EditCategory">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit Category</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="Id" value="@item.Id" />
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Category Name</label>
+                                                    <input type="text" class="form-control" name="Name" value="@item.CategoryName" required />
                                                 </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="Id" value="@item.Id" />
-                                                    <div class="mb-3">
-                                                        <label for="Name" class="form-label">Category Name</label>
-                                                        <input type="text" class="form-control" name="Name" value="@item.CategoryName" required />
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-success">Save Changes</button>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
                             }
                         </tbody>
                     </table>
@@ -446,12 +472,22 @@
                     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
                     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
-                    <script>
-
+                <script>
+                    $(document).ready(function() {
                         // Toggle sidebar on mobile
                         $('#sidebarToggle').on('click', function() {
                             $('.sidebar').toggleClass('active');
                         });
-                    </script>
+
+                        // Category search functionality
+                        $("#categorySearch").on("keyup", function() {
+                            var value = $(this).val().toLowerCase();
+                            $("#municipalityTable tbody tr").each(function() {
+                                var rowText = $(this).text().toLowerCase();
+                                $(this).toggle(rowText.indexOf(value) > -1);
+                            });
+                        });
+                    });
+                </script>
 </body>
 </html>

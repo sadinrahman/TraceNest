@@ -11,33 +11,33 @@ namespace TraceNest.Repository.FoundRepositories
 		{
 			_context = context;
 		}
-		public bool Add(Found found)
+		public async Task<bool> Add(Found found)
 		{
 			_context.Found.Add(found);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
 			
 		}
-		public List<Found> GetAll()
+		public async Task<List<Found>> GetAll()
 		{
-			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.Status=="Pending").ToList();
+			var found =await _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.Status=="Pending").ToListAsync();
 			return found;
 		}
-		public List<Found> GetPostBySpecificUser(Guid userid)
+		public async Task<List<Found>> GetPostBySpecificUser(Guid userid)
 		{
-			var found = _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x => x.UserId == userid).ToList();
+			var found =await _context.Found.Include(c => c.Municipality).Include(y => y.Category).Where(x => x.UserId == userid).ToListAsync();
 			return found;
 		}
-		public bool Update(Found found)
+		public async Task<bool> Update(Found found)
 		{
 			_context.Found.Update(found);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
 		}
-		public bool Delete(Found found)
+		public async Task<bool> Delete(Found found)
 		{
 			_context.Found.Remove(found);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
 		}
 	}

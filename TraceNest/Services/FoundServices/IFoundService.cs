@@ -4,10 +4,10 @@ namespace TraceNest.Services.FoundServices
 {
 	public interface IFoundService
 	{
-		bool PostFoundProduct(FoundPostDto dto, Guid userid, IFormFile Image);
-		List<FoundItemDto> GetAll();
-		List<FoundItemDto> GetByUser(Guid userid);
-		bool UpdateFound(UpdateFoundDto found, Guid userid);
-		bool DeleteLost(Guid id, Guid userid);
+		Task<bool> PostFoundProduct(FoundPostDto dto, Guid userid, IFormFile Image);
+		Task<List<FoundItemDto>> GetAll();
+		Task<List<FoundItemDto>> GetByUser(Guid userid);
+		Task<bool> UpdateFound(UpdateFoundDto found, Guid userid);
+		Task<bool> DeleteLost(Guid id, Guid userid);
 	}
 }

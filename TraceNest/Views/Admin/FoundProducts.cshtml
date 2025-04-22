@@ -113,8 +113,8 @@
         }
 
         .card-image {
-            height: 200px;
-            object-fit: cover;
+            
+            object-fit: fill;
         }
 
         .card-info-label {
@@ -200,13 +200,13 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="@Url.Action("Muncipality", "Admin")">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>Municipality</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="@Url.Action("Category", "Admin")">
                     <i class="fas fa-tags"></i>
                     <span>Category</span>
                 </a>

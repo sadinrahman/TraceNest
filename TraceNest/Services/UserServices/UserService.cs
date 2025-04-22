@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using TraceNest.Dto;
+using TraceNest.Repository.ProfileRepositories;
 using TraceNest.Repository.UserRepositories;
 
 namespace TraceNest.Services.UserServices
@@ -7,9 +8,11 @@ namespace TraceNest.Services.UserServices
 	public class UserService: IUserService
 	{
 		private readonly IUserRepository _repository;
-		public UserService(IUserRepository userRepository)
+		private readonly IProfileRepository _profilrepo;
+		public UserService(IUserRepository userRepository,IProfileRepository profile)
 		{
 			_repository = userRepository;
+			_profilrepo = profile;
 		}
 		public async Task<List<UserViewDto>> GetAll()
 		{
@@ -32,6 +35,19 @@ namespace TraceNest.Services.UserServices
 			else
 			{
 				return null;
+			}
+		}
+		public async Task<bool> BlockUnblock(Guid userid)
+		{
+			var user =await _profilrepo.GetUserByIdAsync(userid);
+			if (user != null)
+			{
+				user.IsActive = !user.IsActive;
+				return await _profilrepo.UpdateUserAsync(user);
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}

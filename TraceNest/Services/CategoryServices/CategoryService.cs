@@ -1,4 +1,6 @@
-﻿using TraceNest.Models;
+﻿using System.Threading.Tasks;
+using TraceNest.Dto;
+using TraceNest.Models;
 using TraceNest.Repository.CategoryRepositories;
 
 namespace TraceNest.Services.CategoryServices
@@ -10,20 +12,39 @@ namespace TraceNest.Services.CategoryServices
 		{
 			_categoryRepository= categoryRepository;
 		}
-		public  List<Category> GetAll()
+		public  async Task<List<Category>> GetAll()
 		{
-			var res = _categoryRepository.GetAllAsync();
+			var res =await _categoryRepository.GetAllAsync();
 			return res;
 		}
-		public  Guid AddCategoryAsync(string category)
+		public async Task<Guid> AddCategoryAsync(string category)
 		{
 			var cat = new Category
 			{
 				CategoryName = category
 			};
-			var res =  _categoryRepository.AddCategoryAsync(cat);
-			var catId = _categoryRepository.GetCategoryID(category);
+			var res = await _categoryRepository.AddCategoryAsync(cat);
+			var catId =await _categoryRepository.GetCategoryID(category);
 			return catId;
+		}
+		public async Task<bool> RemoveCategory(Guid id)
+		{
+			var municipality =await _categoryRepository.GetCategoryById(id);
+			if (municipality == null)
+			{
+				return false;
+			}
+			return await _categoryRepository.RemoveCategory(municipality);
+		}
+		public async Task<bool> UpdateMunicipality(CategoryDto category)
+		{
+			var res =await _categoryRepository.GetCategoryById(category.Id);
+			if (res == null)
+			{
+				return false;
+			}
+			res.CategoryName = category.Name;
+			return await _categoryRepository.UpdateCategory(res);
 		}
 	}
 }
