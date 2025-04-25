@@ -9,5 +9,6 @@ namespace TraceNest.Repository.FoundRepositories
 		Task<List<Found>> GetPostBySpecificUser(Guid userid);
 		Task<bool> Update(Found found);
 		Task<bool> Delete(Found found);
+		Task<List<Found>> GetAllFounded();
 	}
 }

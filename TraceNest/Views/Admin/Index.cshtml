@@ -1,57 +1,47 @@
 ﻿@{
     Layout = null;
 }
-
+@model TraceNest.Dto.DashboardDto
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TraceNest Admin Dashboard</title>
+    <title>TraceNest Dashboard</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #4a5265;
-            --sidebar-hover: #3a4050;
-            --sidebar-active: #323845;
-            --main-bg: #1e2432;
-            --card-bg: #f8f9fc;
-            --primary-color: #4e73df;
-            --found-color: #36b9cc;
-            --lost-color: #f75de2;
-            --matched-color: #4285f4;
+            --primary-dark: #1e2432;
+            --sidebar-dark: #383f53;
+            --text-light: #ffffff;
+            --pink: yellowgreen;
+            --blue: #4c8df5;
+            --cyan: #42c6d6;
         }
 
         body {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--main-bg);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
         }
 
         .sidebar {
+            background-color: var(--sidebar-dark);
+            height: 100vh;
             position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            background-color: var(--sidebar-bg);
             padding-top: 20px;
-            transition: all 0.3s;
-            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            width: 250px;
         }
 
         .sidebar-header {
-            padding: 10px 15px 20px;
-            color: #fdb701;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
+            padding: 0 20px 20px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
             .sidebar-header i {
@@ -64,94 +54,136 @@
             margin: 0;
         }
 
-            .sidebar-menu li {
-                margin-bottom: 5px;
-            }
-
             .sidebar-menu a {
-                display: flex;
-                align-items: center;
-                padding: 12px 15px;
-                color: white;
-                text-decoration: none;
+                display: block;
+                padding: 12px 20px;
+                color: var(--text-light);
+                opacity: 0.8;
                 transition: all 0.3s;
-                font-size: 0.9rem;
+                border-left: 4px solid transparent;
+                text-decoration: none;
             }
 
-                .sidebar-menu a:hover {
-                    background-color: var(--sidebar-hover);
+                .sidebar-menu a.active, .sidebar-menu a:hover {
+                    background-color: rgba(255,255,255,0.1);
+                    opacity: 1;
+                    border-left: 4px solid var(--pink);
                 }
 
-                .sidebar-menu a.active {
-                    background-color: var(--sidebar-active);
-                    border-left: 4px solid #fdb701;
+                .sidebar-menu a i {
+                    width: 24px;
+                    text-align: center;
+                    margin-right: 8px;
                 }
-
-            .sidebar-menu i {
-                margin-right: 10px;
-                width: 20px;
-                text-align: center;
-            }
 
         .main-content {
             margin-left: 250px;
             padding: 20px;
-            transition: all 0.3s;
         }
 
         .card {
-            border-radius: 10px;
+            background-color: #2d334a;
             border: none;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border-radius: 10px;
             margin-bottom: 20px;
-            background-color: var(--card-bg);
+            transition: transform 0.3s;
         }
 
-        .card-header {
-            background-color: white;
-            border-bottom: 1px solid #e3e6f0;
-            border-top-left-radius: 10px !important;
-            border-top-right-radius: 10px !important;
-            padding: 15px 20px;
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .circle-wrapper {
+            position: relative;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .dropdown-toggle::after {
-            display: none;
-        }
-
-        .stat-circle {
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .progress-circle {
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            font-size: 1.5rem;
+            background: conic-gradient(var(--pink) 0% 20%, #ddd 20% 100%);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .progress-circle::before {
+                content: "";
+                position: absolute;
+                width: 130px;
+                height: 130px;
+                border-radius: 50%;
+                background: #2d334a;
+            }
+
+        .percentage {
+            position: relative;
+            font-size: 40px;
             font-weight: bold;
-            color: white;
+            z-index: 2;
         }
 
-        .circle-lost {
-            background-color: var(--lost-color);
+        .stats-card {
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .circle-found {
-            background-color: var(--found-color);
+        .stats-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-light);
+            position: relative;
+            z-index: 2;
         }
 
-        .circle-matched {
-            background-color: var(--matched-color);
+        .stats-title {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Responsive adjustments */
-        @@media (max-width: 991.98px) {
+        .circle-indicator {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: absolute;
+            right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .pink-bg {
+            background-color: var(--pink);
+        }
+
+        .blue-bg {
+            background-color: var(--blue);
+        }
+
+        .cyan-bg {
+            background-color: var(--cyan);
+        }
+
+        .admin-title {
+            color: #f3a33e;
+            font-weight: bold;
+        }
+
+        @@media (max-width: 992px) {
             .sidebar
 
         {
@@ -159,18 +191,13 @@
             overflow: hidden;
         }
 
-        .sidebar-header span, .sidebar-menu span {
+        .sidebar-menu a span {
             display: none;
         }
 
-        .sidebar-menu a {
-            padding: 15px;
-            justify-content: center;
-        }
-
-        .sidebar-menu i {
+        .sidebar-menu a i {
             margin-right: 0;
-            font-size: 1.2rem;
+            font-size: 20px;
         }
 
         .main-content {
@@ -179,297 +206,213 @@
 
         }
 
-        @@media (max-width: 767.98px) {
+        @@media (max-width: 768px) {
             .main-content
 
         {
             margin-left: 0;
-            padding: 15px;
+            padding-top: 70px;
         }
 
         .sidebar {
-            transform: translateX(-100%);
-        }
-
-            .sidebar.active {
-                transform: translateX(0);
-                width: 250px;
-            }
-
-                .sidebar.active .sidebar-header span,
-                .sidebar.active .sidebar-menu span {
-                    display: inline;
-                }
-
-                .sidebar.active .sidebar-menu a {
-                    padding: 12px 15px;
-                    justify-content: flex-start;
-                }
-
-                .sidebar.active .sidebar-menu i {
-                    margin-right: 10px;
-                }
-
-        .toggle-btn {
-            display: block !important;
+            width: 100%;
+            height: auto;
             position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1001;
+            bottom: 0;
+            left: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
         }
 
+        .sidebar-menu {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
         }
 
-        .toggle-btn {
+        .sidebar-header {
             display: none;
-            background-color: var(--sidebar-bg);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 10px;
         }
 
-        /* Progress Circle */
-        .progress-circle {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
+        .sidebar-menu a {
+            padding: 10px;
+            text-align: center;
+            border-left: none;
+            border-top: 3px solid transparent;
         }
 
-            .progress-circle svg {
-                transform: rotate(-90deg);
+            .sidebar-menu a.active, .sidebar-menu a:hover {
+                border-left: none;
+                border-top: 3px solid var(--pink);
             }
 
-            .progress-circle circle {
-                fill: none;
-                stroke-width: 15;
-            }
-
-        .circle-bg {
-            stroke: #e0e5f2;
-        }
-
-        .circle-progress {
-            stroke: var(--lost-color);
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.5s ease;
-        }
-
-        .progress-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        @@media (max-width: 991.98px) {
-            .sidebar {
-                width: 70px;
-                overflow: hidden;
-            }
-
-            .sidebar-header span, .sidebar-menu span {
+            .sidebar-menu a span {
                 display: none;
             }
 
-            .sidebar-menu a {
-                padding: 15px;
-                justify-content: center;
-            }
-
-            .sidebar-menu i {
-                margin-right: 0;
-                font-size: 1.2rem;
-            }
-
-            .main-content {
-                margin-left: 70px;
-            }
-        }
-
-        @@media (max-width: 767.98px) {
-            .main-content {
-                margin-left: 0;
-                padding: 15px;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-                .sidebar.active {
-                    transform: translateX(0);
-                    width: 250px;
-                }
-
-                    .sidebar.active .sidebar-header span,
-                    .sidebar.active .sidebar-menu span {
-                        display: inline;
-                    }
-
-                    .sidebar.active .sidebar-menu a {
-                        padding: 12px 15px;
-                        justify-content: flex-start;
-                    }
-
-                    .sidebar.active .sidebar-menu i {
-                        margin-right: 10px;
-                    }
-
-            .toggle-btn {
-                display: block !important;
-                position: fixed;
-                top: 15px;
-                left: 15px;
-                z-index: 1001;
-            }
-        }
-
-        .toggle-btn {
-            display: none;
-            background-color: var(--sidebar-bg);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 10px;
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Toggle Button -->
-    <button class="toggle-btn" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-    </button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-cube"></i>
+                    <span>Admin panel</span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="@Url.Action("Index", "Admin")" class="active">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("UserDetails", "Admin")">
+                            <i class="fas fa-user"></i>
+                            <span>User details</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("LostProducts", "Admin")">
+                            <i class="fas fa-search"></i>
+                            <span>Lost Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("FoundProducts", "Admin")">
+                            <i class="fas fa-box"></i>
+                            <span>Found Products</span>
+                        </a>
+                    </li>
+                   
+                    <li>
+                        <a href="@Url.Action("Muncipality", "Admin")">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Municipality</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Category", "Admin")" >
+                            <i class="fas fa-tags"></i>
+                            <span>Category</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-cube"></i>
-            <span>Admin panel</span>
-        </div>
-        <ul class="sidebar-menu">
-            <li>
-                <a href="@Url.Action("Index", "Admin")">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("UserDetails", "Admin")">
-                    <i class="fas fa-user"></i>
-                    <span>User details</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("LostProducts", "Admin")">
-                    <i class="fas fa-search"></i>
-                    <span>Lost Products</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("FoundProducts", "Admin")">
-                    <i class="fas fa-box"></i>
-                    <span>Found Products</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Matched Products</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Muncipality", "Admin")">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Municipality</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Category", "Admin")">
-                    <i class="fas fa-tags"></i>
-                    <span>Category</span>
-                </a>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container-fluid">
-            <!-- Top Cards -->
-            <div class="row mb-4">
-                <!-- Users Who Posted Chart -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <h6 class="m-0 font-weight-bold">Users Who Posted</h6>
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="container-fluid">
+                    <!-- User Activity Card -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Users Who Posted</h5>
+                                    <div class="circle-wrapper">
+                                        <div class="progress-circle">
+                                            <div class="percentage">80</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body d-flex align-items-center justify-content-center">
-                            <div class="progress-circle">
-                                <svg width="200" height="200" viewBox="0 0 200 200">
-                                    <circle class="circle-bg" cx="100" cy="100" r="90" />
-                                    <circle class="circle-progress" cx="100" cy="100" r="90"
-                                            stroke-dasharray="565.48" stroke-dashoffset="118.75" /> <!-- 565.48 is approx 2π*90, and 118.75 is (1-0.79)*565.48 -->
-                                </svg>
-                                <div class="progress-text">20%</div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row">
+                        <!-- Lost Products -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">LOST PRODUCTS</div>
+                                <div class="stats-value mt-2">@Model.LostItemsCount</div>
+                                <div class="circle-indicator pink-bg">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Found Products -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">FOUND PRODUCT</div>
+                                <div class="stats-value mt-2">@Model.FoundItemsCount</div>
+                                <div class="circle-indicator cyan-bg">
+                                    <i class="fas fa-box-open"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Founded Products -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">FOUNDED PRODUCTS</div>
+                                <div class="stats-value mt-2">@Model.FoundItemsCount</div>
+                                <div class="circle-indicator blue-bg">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Stats Based on DashboardDto -->
+                    <div class="row">
+                        <!-- Users Count -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">USERS</div>
+                                <div class="stats-value mt-2 users-count">@Model.UsersCount</div>
+                                <div class="circle-indicator blue-bg">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Categories Count -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">CATEGORIES</div>
+                                <div class="stats-value mt-2 categories-count">@Model.CategoriesCount</div>
+                                <div class="circle-indicator pink-bg">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Municipalities Count -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card stats-card">
+                                <div class="stats-title">MUNICIPALITIES</div>
+                                <div class="stats-value mt-2 municipalities-count">@Model.MunicipalitiesCount</div>
+                                <div class="circle-indicator cyan-bg">
+                                    <i class="fas fa-city"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                
             </div>
-
-            <!-- Bottom Stat Cards -->
-            <div class="row">
-                <!-- Lost Products Stat -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted mb-1">Lost Products</h6>
-                                
-                            </div>
-                            <div class="stat-circle circle-lost">210</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Found Products Stat -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted mb-1">Found Product</h6>
-                               
-                            </div>
-                            <div class="stat-circle circle-found">150</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Matched Products Stat -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted mb-1">Founded Products</h6>
-                                
-                            </div>
-                            <div class="stat-circle circle-matched">98</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </main>
+    </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <!-- Bootstrap and other scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Handle active menu items
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarItems = document.querySelectorAll('.sidebar-menu a');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-﻿using TraceNest.Dto;
+﻿using System.Threading.Tasks;
+using TraceNest.Dto;
 using TraceNest.Helper.CloudinaryHelper;
 using TraceNest.Models;
 using TraceNest.Repository.LostRepositories;
@@ -14,7 +15,7 @@ namespace TraceNest.Services.LostServices
 			_repo = repo;
 			_service = service;
 		}
-		public bool PostLostProduct(LostAddDto dto,Guid userid,IFormFile Image) 
+		public async Task<bool> PostLostProduct(LostAddDto dto,Guid userid,IFormFile Image) 
 		{
 			var photo = _service.UploadImage(Image);
 			Console.WriteLine("qwerty");
@@ -29,16 +30,16 @@ namespace TraceNest.Services.LostServices
 				CategoryId = dto.CategoryId
 			};
 			Console.WriteLine("fbvhjhbfdcvjhbjhbjhbbjhuy");
-			var result =_repo.AddAsync(res);
+			var result =await _repo.AddAsync(res);
 			if(!result)
 			{
 				return false;
 			}
 			return true;
 		}
-		public List<LostItemDto> GetAll()
+		public async Task<List<LostItemDto>> GetAll()
 		{
-			var res = _repo.GetAll();
+			var res =await _repo.GetAll();
 			var result = new List<LostItemDto>();
 			foreach (var item in res)
 			{
@@ -55,9 +56,9 @@ namespace TraceNest.Services.LostServices
 			}
 			return result;
 		}
-		public List<LostItemDto> GetPostBySpecificUser(Guid userid)
+		public async Task<List<LostItemDto>> GetPostBySpecificUser(Guid userid)
 		{
-			var res = _repo.GetPostBySpecificUser(userid);
+			var res =await _repo.GetPostBySpecificUser(userid);
 			var result = new List<LostItemDto>();
 			foreach (var item in res)
 			{
@@ -75,9 +76,10 @@ namespace TraceNest.Services.LostServices
 			}
 			return result;
 		}
-		public bool UpdateLost(UpdateLostDto found, Guid userid)
+		public async Task<bool> UpdateLost(UpdateLostDto found, Guid userid)
 		{
-			var post = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == found.Id);
+			var posts =await _repo.GetPostBySpecificUser(userid);
+			var post = posts.FirstOrDefault(x => x.Id == found.Id);
 			if (post == null)
 			{
 				return false;
@@ -88,22 +90,35 @@ namespace TraceNest.Services.LostServices
 			post.CategoryId = found.Category ?? post.CategoryId;
 			post.LostDate = found.LostDate;
 			post.Status = found.Status ?? post.Status;
-			var result = _repo.Update(post);
+			var result =await _repo.Update(post);
 			return result;
 		}
-		public bool DeleteLost(Guid id, Guid userid)
+		public async Task<bool> DeleteLost(Guid id, Guid userid)
 		{
-			var res = _repo.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == id);
+			var ress = await _repo.GetPostBySpecificUser(userid);
+			var res = ress.FirstOrDefault(x => x.Id == id);
 			if (res == null)
 			{
 				return false;
 			}
-			var result = _repo.Delete(res);
+			var result =await _repo.Delete(res);
 			if (!result)
 			{
 				return false;
 			}
 			return true;
+		}
+		public async Task<int> LostCount()
+		{
+			var res=await _repo.GetAllLosted();
+			if (res != null)
+			{
+				return res.Count;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 	}
 }

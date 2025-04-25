@@ -74,7 +74,7 @@ namespace TraceNest.Controllers
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userId))
 			{
-				var res =  _services.PostLostProduct(dto, userId, Photo);
+				var res =await  _services.PostLostProduct(dto, userId, Photo);
 				Console.WriteLine(res);
 				return RedirectToAction("Home", "Home");
 			}
@@ -86,13 +86,13 @@ namespace TraceNest.Controllers
 			
 		}
 		[HttpGet("Lost")]
-		public   async Task<IActionResult> Lost()
+		public async Task<IActionResult> Lost()
 		{
 			var hlo =await  _ser.GetAll();
 			var category =await  _categoryService.GetAll();
 			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
 			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
-			var res=_services.GetAll();
+			var res=await _services.GetAll();
 
 			return View(res);
 		}

@@ -6,5 +6,6 @@ namespace TraceNest.Services.UserServices
 	{
 		Task<List<UserViewDto>> GetAll();
 		Task<bool> BlockUnblock(Guid userid);
+		Task<int> Countusers();
 	}
 }

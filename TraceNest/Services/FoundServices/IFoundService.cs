@@ -9,5 +9,6 @@ namespace TraceNest.Services.FoundServices
 		Task<List<FoundItemDto>> GetByUser(Guid userid);
 		Task<bool> UpdateFound(UpdateFoundDto found, Guid userid);
 		Task<bool> DeleteLost(Guid id, Guid userid);
+		Task<int> CountFound();
 	}
 }

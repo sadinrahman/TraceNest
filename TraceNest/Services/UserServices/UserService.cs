@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 using TraceNest.Dto;
 using TraceNest.Repository.ProfileRepositories;
 using TraceNest.Repository.UserRepositories;
@@ -49,6 +50,11 @@ namespace TraceNest.Services.UserServices
 			{
 				return false;
 			}
+		}
+		public async Task<int> Countusers()
+		{
+			var result = await _repository.GetAllUsersAsync();
+			return result != null ? result.Count : 0;
 		}
 	}
 }

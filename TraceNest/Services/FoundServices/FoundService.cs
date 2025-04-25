@@ -109,5 +109,17 @@ namespace TraceNest.Services.FoundServices
 			}
 			return true;
 		}
+		public async Task<int> CountFound()
+		{
+			var res= await _repo.GetAllFounded();
+			if (res != null)
+			{
+				return res.Count;
+			}
+			else
+			{
+				return 0;
+			}
+		}
 	}
 }

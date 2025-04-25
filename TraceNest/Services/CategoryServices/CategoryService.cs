@@ -46,5 +46,10 @@ namespace TraceNest.Services.CategoryServices
 			res.CategoryName = category.Name;
 			return await _categoryRepository.UpdateCategory(res);
 		}
+		public async Task<int> CategoryCount()
+		{
+			var res = await _categoryRepository.GetAllAsync();
+			return res.Count();
+		}
 	}
 }

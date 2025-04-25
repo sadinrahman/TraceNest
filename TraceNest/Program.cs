@@ -40,7 +40,7 @@ builder.Services.AddAuthentication("Bearer")
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 		};
 
-		// 👇 This enables reading token from cookie
+		
 		options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
 		{
 			OnMessageReceived = context =>

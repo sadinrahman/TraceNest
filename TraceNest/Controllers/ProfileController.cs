@@ -79,12 +79,12 @@ namespace TraceNest.Controllers
 			
 		}
 		[HttpGet("LostPosts")]
-		public IActionResult LostPosts()
+		public async Task<IActionResult> LostPosts()
 		{
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _lostService.GetPostBySpecificUser(userid);
+				var res =await _lostService.GetPostBySpecificUser(userid);
 				return View(res);
 			}
 			return RedirectToAction("Login", "Auth");
@@ -127,7 +127,8 @@ namespace TraceNest.Controllers
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _lostService.GetPostBySpecificUser(userid).FirstOrDefault(x => x.Id == id);
+				var ress =await _lostService.GetPostBySpecificUser(userid);
+				var res = ress.FirstOrDefault(x => x.Id == id);
 				return View(res);
 			}
 			return RedirectToAction("Login", "Auth");

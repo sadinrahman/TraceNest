@@ -48,5 +48,10 @@ namespace TraceNest.Services.MunicipalityServices
 			return await _repo.UpdateMunicipality(res);
 
 		}
+		public async Task<int> muncipalitycount()
+		{
+			var res = await _repo.GetAllAsync();
+			return res.Count();
+		}
 	}
 }

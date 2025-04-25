@@ -25,9 +25,22 @@ namespace TraceNest.Controllers
 			_municipalityService = municipalityService;
 			_categoryService = categoryService;
 		}
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
         {
-            return View();
+			var users =await _userService.Countusers();
+			var found =await _ser.CountFound();
+			var lost =await _services.LostCount();
+			var category= await _categoryService.CategoryCount();
+			var muncipality=await _municipalityService.muncipalitycount();
+			var result = new DashboardDto
+			{
+				UsersCount = users,
+				FoundItemsCount = found,
+				LostItemsCount = lost,
+				CategoriesCount = category,
+				MunicipalitiesCount = muncipality
+			};
+			return View(result);
         }
 		[HttpGet("UserDetails")]
         public async Task<IActionResult> UserDetails()
@@ -37,7 +50,7 @@ namespace TraceNest.Controllers
 		}
 		public async Task<IActionResult> LostProducts()
 		{
-			var res= _services.GetAll();
+			var res=await _services.GetAll();
 			return View(res);
 		}
 		public async Task<IActionResult> FoundProducts()

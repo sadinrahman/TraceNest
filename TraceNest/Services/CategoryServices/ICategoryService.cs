@@ -9,5 +9,6 @@ namespace TraceNest.Services.CategoryServices
 		Task<Guid> AddCategoryAsync(string category);
 		Task<bool> RemoveCategory(Guid id);
 		Task<bool> UpdateMunicipality(CategoryDto category);
+		Task<int> CategoryCount();
 	}
 }

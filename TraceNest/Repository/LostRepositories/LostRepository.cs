@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Extensibility;
+using System.Threading.Tasks;
 using TraceNest.Data;
 using TraceNest.Models;
 
@@ -12,33 +13,38 @@ namespace TraceNest.Repository.LostRepositories
 		{
 			_context = context;
 		}
-		public bool AddAsync(Lost lost)
+		public async Task<bool> AddAsync(Lost lost)
 		{
 			_context.Add(lost);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
 		}
-		public List<Lost> GetAll()
+		public async Task<List<Lost>> GetAll()
 		{
-			var losts = _context.Losts.Include(c => c.Municipality).Include(y=>y.Category).Where(x => x.Status == "Pending").ToList();
+			var losts =await _context.Losts.Include(c => c.Municipality).Include(y=>y.Category).Where(x => x.Status == "Pending").ToListAsync();
 			return losts;
 		}
-		public List<Lost> GetPostBySpecificUser(Guid userid)
+		public async Task<List<Lost>> GetPostBySpecificUser(Guid userid)
 		{
-			var losts = _context.Losts.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.UserId==userid).ToList();
+			var losts =await _context.Losts.Include(c => c.Municipality).Include(y => y.Category).Where(x=>x.UserId==userid).ToListAsync();
 			return losts;
 		}
-		public bool Update(Lost lost)
+		public async  Task<bool> Update(Lost lost)
 		{
 			_context.Losts.Update(lost);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
 		}
-		public bool Delete(Lost lost)
+		public async Task<bool> Delete(Lost lost)
 		{
 			_context.Losts.Remove(lost);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return true;
+		}
+		public async Task<List<Lost>> GetAllLosted()
+		{
+			var losts = await _context.Losts.Include(c => c.Municipality).Include(y => y.Category).ToListAsync();
+			return losts;
 		}
 	}
 }

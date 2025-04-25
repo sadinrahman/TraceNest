@@ -40,5 +40,10 @@ namespace TraceNest.Repository.FoundRepositories
 			await _context.SaveChangesAsync();
 			return true;
 		}
+		public async Task<List<Found>> GetAllFounded()
+		{
+			var found = await _context.Found.Include(c => c.Municipality).Include(y => y.Category).ToListAsync();
+			return found;
+		}
 	}
 }
