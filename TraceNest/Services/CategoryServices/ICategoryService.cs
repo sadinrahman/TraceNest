@@ -10,5 +10,6 @@ namespace TraceNest.Services.CategoryServices
 		Task<bool> RemoveCategory(Guid id);
 		Task<bool> UpdateMunicipality(CategoryDto category);
 		Task<int> CategoryCount();
+		Task<string> GetCategoryName(Guid id);
 	}
 }

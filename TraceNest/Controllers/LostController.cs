@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TraceNest.Dto;
-using TraceNest.Models;
-using TraceNest.Repository.MunicipalityRepositories;
 using TraceNest.Services.CategoryServices;
 using TraceNest.Services.LostServices;
 using TraceNest.Services.MunicipalityServices;
@@ -86,16 +83,31 @@ namespace TraceNest.Controllers
 			
 		}
 		[HttpGet("Lost")]
-		public async Task<IActionResult> Lost()
+		public async Task<IActionResult> Lost(Guid? municipalityId, Guid? categoryId)
 		{
-			var hlo =await  _ser.GetAll();
-			var category =await  _categoryService.GetAll();
-			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
-			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
-			var res=await _services.GetAll();
+			var municipalities = await _ser.GetAll();
+			var categories = await _categoryService.GetAll();
 
-			return View(res);
+			ViewBag.CategoryList = new SelectList(categories, "Id", "CategoryName");
+			ViewBag.MunicipalityList = new SelectList(municipalities, "Id", "MunicipalityName");
+
+			var items = await _services.GetAll();
+
+			if (municipalityId.HasValue)
+			{
+				var municipality = await _ser.GetMunicipalityName(municipalityId.Value);
+				items = items.Where(x => x.Municipality == municipality).ToList();
+			}
+
+			if (categoryId.HasValue)
+			{
+				var category = await _categoryService.GetCategoryName(categoryId.Value);
+				items = items.Where(x => x.Category == category).ToList();
+			}
+
+			return View(items);
 		}
+
 
 	}
 }

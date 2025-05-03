@@ -10,5 +10,6 @@ namespace TraceNest.Services.MunicipalityServices
 		Task<bool> RemoveMuncipality(Guid id);
 		Task<bool> UpdateMunicipality(MuncipalityDto municipality);
 		Task<int> muncipalitycount();
+		Task<string> GetMunicipalityName(Guid id);
 	}
 }

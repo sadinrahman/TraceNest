@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TraceNest.Dto;
+using TraceNest.Models;
 using TraceNest.Services.CategoryServices;
 using TraceNest.Services.FoundServices;
 using TraceNest.Services.LostServices;
@@ -26,6 +27,7 @@ namespace TraceNest.Controllers
 		[HttpGet("ReportFound")]
 		public async Task<IActionResult> ReportFound()
 		{
+			Console.WriteLine("hiiiiiiiiiiiiiii");
 			var res =await _ser.GetAll();
 			var category =await _categoryService.GetAll();
 			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
@@ -36,9 +38,9 @@ namespace TraceNest.Controllers
 		[HttpPost("ReportFound")]
 		public async Task<IActionResult> ReportFound([FromForm] FoundPostDto dto, IFormFile Photo)
 		{
+			Console.WriteLine("Hlooooooooooooooooooooo");
 			if (!ModelState.IsValid)
 			{
-				Console.WriteLine("something fishy");
 				foreach (var state in ModelState)
 				{
 					foreach (var error in state.Value.Errors)
@@ -53,10 +55,8 @@ namespace TraceNest.Controllers
 				ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
 				return View(dto);
 			}
-			Console.WriteLine("hlooooooooooooo");
 			if (dto.CategoryId == null && !string.IsNullOrEmpty(dto.CustomCategory))
 			{
-				Console.WriteLine("Keruniillllllaaaaaaaaa");
 				var newCategoryId =await _categoryService.AddCategoryAsync(dto.CustomCategory);
 				dto.CategoryId = newCategoryId;
 			}
@@ -69,7 +69,7 @@ namespace TraceNest.Controllers
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userId))
 			{
-				var res = _services.PostFoundProduct(dto, userId, Photo);
+				var res =await _services.PostFoundProduct(dto, userId, Photo);
 				return RedirectToAction("Home", "Home");
 			}
 			else
@@ -78,15 +78,28 @@ namespace TraceNest.Controllers
 			}
 		}
 		[HttpGet("Found")]
-		public async Task<IActionResult> Found()
+		public async Task<IActionResult> Found(Guid? municipalityId, Guid? categoryId)
 		{
-			var hlo =await _ser.GetAll();
-			var category = await _categoryService.GetAll();
-			ViewBag.CategoryList = new SelectList(category, "Id", "CategoryName");
-			ViewBag.MunicipalityList = new SelectList(hlo, "Id", "MunicipalityName");
-			var res =await _services.GetAll();
+			var municipalities = await _ser.GetAll();
+			var categories = await _categoryService.GetAll();
 
-			return View(res);
+			ViewBag.CategoryList = new SelectList(categories, "Id", "CategoryName", categoryId);
+			ViewBag.MunicipalityList = new SelectList(municipalities, "Id", "MunicipalityName", municipalityId);
+
+			var items = await _services.GetAll();
+
+			if (municipalityId.HasValue)
+			{
+				var muncipality=await _ser.GetMunicipalityName(municipalityId.Value);
+				items = items.Where(i => i.Municipality == muncipality).ToList();
+			}
+			if (categoryId.HasValue)
+			{
+				var category = await _categoryService.GetCategoryName(categoryId.Value);
+				items = items.Where(i => i.Category == category).ToList();
+			}
+			return View(items);
 		}
+
 	}
 }

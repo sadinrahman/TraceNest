@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using TraceNest.Services.ProfileServices;
 namespace TraceNest.Controllers
 {
     [Route("Profile")]
+	[Authorize]
 	public class ProfileController : Controller
     {
         private readonly IProfileService _service;
@@ -106,13 +108,13 @@ namespace TraceNest.Controllers
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpPost("EditFound")]
-		public IActionResult EditFound(UpdateFoundDto update)
+		public async Task<IActionResult> EditFound(UpdateFoundDto update)
 		{
 
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res=_foundService.UpdateFound(update, userid);
+				var res=await _foundService.UpdateFound(update, userid);
 				return RedirectToAction("FoundPost");
 			}
 			return RedirectToAction("Login", "Auth");
@@ -134,35 +136,35 @@ namespace TraceNest.Controllers
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpPost("EditLost")]
-		public IActionResult EditLost(UpdateLostDto update)
+		public async Task<IActionResult> EditLost(UpdateLostDto update)
 		{
 
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _lostService.UpdateLost(update, userid);
+				var res =await _lostService.UpdateLost(update, userid);
 				return RedirectToAction("LostPosts");
 			}
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpGet("DeleteLost")]
-		public IActionResult DeleteLost(Guid id)
+		public async Task<IActionResult> DeleteLost(Guid id)
 		{
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _lostService.DeleteLost(id, userid);
+				var res =await _lostService.DeleteLost(id, userid);
 				return RedirectToAction("LostPosts", "Profile");
 			}
 			return RedirectToAction("Login", "Auth");
 		}
 		[HttpGet("DeleteFound")]
-		public IActionResult DeleteFound(Guid id)
+		public async Task<IActionResult> DeleteFound(Guid id)
 		{
 			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (Guid.TryParse(userIdString, out Guid userid))
 			{
-				var res = _foundService.DeleteLost(id, userid);
+				var res =await _foundService.DeleteLost(id, userid);
 				return RedirectToAction("FoundPost", "Profile");
 			}
 			return RedirectToAction("Login", "Auth");

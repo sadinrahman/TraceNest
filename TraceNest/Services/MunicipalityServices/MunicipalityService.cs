@@ -53,5 +53,14 @@ namespace TraceNest.Services.MunicipalityServices
 			var res = await _repo.GetAllAsync();
 			return res.Count();
 		}
+		public async Task<string> GetMunicipalityName(Guid id)
+		{
+			var res = await _repo.GetMunicipalityById(id);
+			if (res == null)
+			{
+				return null;
+			}
+			return res.MunicipalityName;
+		}
 	}
 }

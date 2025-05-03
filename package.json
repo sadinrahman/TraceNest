@@ -1,0 +1,23 @@
+{
+  "name": "tracenest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadinrahman/TraceNest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sadinrahman/TraceNest/issues"
+  },
+  "homepage": "https://github.com/sadinrahman/TraceNest#readme",
+  "description": "",
+  "dependencies": {
+    "@microsoft/signalr": "^8.0.7"
+  }
+}

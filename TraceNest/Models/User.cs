@@ -19,5 +19,7 @@ namespace TraceNest.Models
 		public bool IsActive { get; set; } = true;
 		public List<Lost> Losts { get; set; }
 		public List<Found> Founds { get; set; }
+		public List<Messages> SendMessages { get; set; }
+		public List<Messages> RecievedMessages { get; set; }
 	}
 }

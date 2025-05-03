@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TraceNest.Dto;
 using TraceNest.Services.AuthServices;
@@ -43,9 +44,15 @@ namespace TraceNest.Controllers
 				Expires = DateTimeOffset.UtcNow.AddHours(5) // Optional: set expiry
 			});
 
-			var userrole = User.FindFirstValue(ClaimTypes.Role);
-			Console.WriteLine(userrole);
-			if (userrole == "admin")
+			var handler = new JwtSecurityTokenHandler();
+			var jwtToken = handler.ReadJwtToken(token);
+			var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+			if (role == null)
+			{
+				Console.WriteLine("Hlooooooooooooooooooooo");
+			}
+			Console.WriteLine(role);
+			if (role == "admin")
 			{
 				return RedirectToAction("Index", "Admin");
 			}

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TraceNest.Data;
@@ -40,7 +41,6 @@ builder.Services.AddAuthentication("Bearer")
 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 		};
 
-		
 		options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
 		{
 			OnMessageReceived = context =>
@@ -52,9 +52,17 @@ builder.Services.AddAuthentication("Bearer")
 					context.Token = token;
 				}
 				return Task.CompletedTask;
+			},
+			OnChallenge = context =>
+			{
+				// Prevent redirect to /Account/Login
+				context.HandleResponse();
+				context.Response.StatusCode = 401;
+				return Task.CompletedTask;
 			}
 		};
 	});
+
 
 
 
@@ -76,6 +84,9 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddSignalR();
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -90,7 +101,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

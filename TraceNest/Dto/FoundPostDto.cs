@@ -14,7 +14,7 @@ namespace TraceNest.Dto
 		public Guid? MunicipalityId { get; set; }
 		[Required]
 		public DateOnly FoundDate { get; set; }
-		public string CustomCategory { get; set; }
-		public string customMunicipality { get; set; }
+		public string? CustomCategory { get; set; }
+		public string? customMunicipality { get; set; }
 	}
 }

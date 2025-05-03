@@ -51,5 +51,14 @@ namespace TraceNest.Services.CategoryServices
 			var res = await _categoryRepository.GetAllAsync();
 			return res.Count();
 		}
+		public async Task<string> GetCategoryName(Guid id)
+		{
+			var res = await _categoryRepository.GetCategoryById(id);
+			if (res == null)
+			{
+				return null;
+			}
+			return res.CategoryName;
+		}
 	}
 }
