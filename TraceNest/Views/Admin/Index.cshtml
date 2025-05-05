@@ -302,6 +302,12 @@
                             <span>Category</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="@Url.Action("LogOut", "Auth")">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
                 </ul>
             </aside>
 
@@ -316,7 +322,7 @@
                                     <h5 class="card-title mb-4">Users Who Posted</h5>
                                     <div class="circle-wrapper">
                                         <div class="progress-circle">
-                                            <div class="percentage">80</div>
+                                            <div class="percentage">@Model.UsersCount</div>
                                         </div>
                                     </div>
                                 </div>

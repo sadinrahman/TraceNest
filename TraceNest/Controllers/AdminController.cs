@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TraceNest.Dto;
 using TraceNest.Models;
@@ -10,6 +11,7 @@ using TraceNest.Services.UserServices;
 
 namespace TraceNest.Controllers
 {
+	[Authorize(Roles ="admin")]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;

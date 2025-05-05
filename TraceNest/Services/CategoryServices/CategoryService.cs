@@ -19,6 +19,12 @@ namespace TraceNest.Services.CategoryServices
 		}
 		public async Task<Guid> AddCategoryAsync(string category)
 		{
+			var isexist=await _categoryRepository.GetAllAsync();
+			var check = isexist.FirstOrDefault(x => x.CategoryName == category);
+			if(check != null)
+			{
+				return check.Id;
+			}
 			var cat = new Category
 			{
 				CategoryName = category

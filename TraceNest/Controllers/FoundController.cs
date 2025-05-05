@@ -70,7 +70,7 @@ namespace TraceNest.Controllers
 			if (Guid.TryParse(userIdString, out Guid userId))
 			{
 				var res =await _services.PostFoundProduct(dto, userId, Photo);
-				return RedirectToAction("Home", "Home");
+				return RedirectToAction("Found", "Found");
 			}
 			else
 			{

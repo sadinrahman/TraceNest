@@ -73,7 +73,7 @@ namespace TraceNest.Controllers
 			{
 				var res =await  _services.PostLostProduct(dto, userId, Photo);
 				Console.WriteLine(res);
-				return RedirectToAction("Home", "Home");
+				return RedirectToAction("Lost", "Lost");
 			}
 			else
 			{

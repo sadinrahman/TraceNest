@@ -19,6 +19,12 @@ namespace TraceNest.Services.MunicipalityServices
 		}
 		public async Task<Guid> AddMuncipality(string MuncipalityName)
 		{
+			var isexists = await _repo.GetAllAsync();
+			var check = isexists.FirstOrDefault(x => x.MunicipalityName == MuncipalityName);
+			if (check != null)
+			{
+				return check.Id;
+			}
 			var res = new Municipality
 			{
 				MunicipalityName = MuncipalityName
