@@ -5,23 +5,47 @@
 }
 <style>
     .icon-container {
-        
         height: 30px;
         display: flex;
         justify-content: end;
         align-items: center;
     }
 
-    #button{
-        width:20vw;
-        
+    #button {
+        width: 20vw;
     }
 
-    .ButtonDiv{
+    .ButtonDiv {
         display: flex;
         justify-content: flex-end;
-        margin-top:3vh;
+        margin-top: 3vh;
     }
+
+    .item-actions {
+        padding: 10px 15px;
+        border-top: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+
+    .btn-message {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        font-size: 0.875rem;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+        .btn-message:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            color: white;
+        }
+
+        .btn-message i {
+            margin-right: 5px;
+        }
 </style>
 <div class="container mt-4 mb-5">
     <div class="header">
@@ -30,17 +54,15 @@
 
     <div class="search-container">
         <div class="search-input">
-            
             <input type="text" class="form-control" id="itemSearchInput" placeholder="Item Name">
         </div>
     </div>
 
-    
     <div class="ButtonDiv">
         <button onclick="location.href='@Url.Action("ReportLost", "Lost")'" class="btn btn-lost mb-3" id="button">
-        <span>Lost</span>
-        <span class="icon-container"><i class="fas fa-box-open lost-icon"></i></span>
-    </button>
+            <span>Lost</span>
+            <span class="icon-container"><i class="fas fa-box-open lost-icon"></i></span>
+        </button>
     </div>
 
     <div class="row">
@@ -76,9 +98,9 @@
                     {
                         <div class="col-md-6 col-lg-4 mb-4 item-wrapper" data-title="@item.Title.ToLower()">
                             <div class="item-card">
-                                <div class="item-name p-2>
+                                @* <div class="item-name p-2">
                                     @item.Description
-                                </div>
+                                </div> *@
                                 <div class="item-date ps-2">@item.LostDate.ToString("MMM d, yyyy")</div>
                                 <div class="item-image">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -102,6 +124,16 @@
                                     <div class="item-title">@item.Title</div>
                                     <div class="item-location">@item.Municipality </div>
                                     <div class="item-description">@item.Description</div>
+                                </div>
+
+                                <!-- Message Button for Lost Items -->
+                                <div class="item-actions">
+                                    <button class="btn btn-message btn-sm w-100 message-btn"
+                                            data-userid="@item.userid"
+                                            data-itemid="@item.Id">
+                                        <i class="fas fa-comment"></i>
+                                        Message User
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -129,6 +161,21 @@
                 $("#itemsContainer .item-wrapper").filter(function() {
                     $(this).toggle($(this).data("title").indexOf(value) > -1);
                 });
+            });
+
+            // Message button click handler for lost items
+            $(document).on("click", ".message-btn", function () {
+                var userId = $(this).data("userid");
+                var itemId = $(this).data("itemid");
+
+                console.log("User ID:", userId, "Item ID:", itemId); // Debug log
+
+                if (userId && userId !== "") {
+                    // Navigate to chat page
+                    window.location.href = '/Chat/Chat?userId=' + encodeURIComponent(userId);
+                } else {
+                    alert("Invalid user ID.");
+                }
             });
         });
     </script>

@@ -13,7 +13,7 @@
             background-color: #f8f9fa;
         }
 
-        
+
         .top-nav {
             background-color: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -56,6 +56,7 @@
                 background-color: #dee2e6;
                 color: #212529;
             }
+
         .navbar-toggler {
             border: none;
             padding: 0.5rem;
@@ -245,6 +246,14 @@
             padding: 2rem 0;
         }
 
+        /* Chat navigation styling */
+        .nav-link.chat-link {
+            position: relative;
+        }
+
+            .nav-link.chat-link i {
+                margin-right: 5px;
+            }
 
         @@media (max-width: 992px) {
             .main-heading
@@ -324,7 +333,7 @@
 <body>
     <nav class="navbar navbar-expand-lg top-nav">
         <div class="container">
-            
+
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -348,6 +357,11 @@
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Found" asp-action="ReportFound" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Found" && ViewContext.RouteData.Values["Action"]?.ToString() == "ReportFound" ? "active" : "")">Report Found</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Chat" asp-action="Index" class="nav-link chat-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Chat" ? "active" : "")">
+                                <i class="fas fa-comments"></i>Chat
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a asp-controller="Profile" asp-action="Index" class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")">Profile</a>
@@ -377,6 +391,7 @@
                         <li><a asp-controller="Lost" asp-action="ReportLost">Report Lost</a></li>
                         <li><a asp-controller="Found" asp-action="Found">Found</a></li>
                         <li><a asp-controller="Found" asp-action="ReportFound">Report Found</a></li>
+                        <li><a asp-controller="Chat" asp-action="Index">Chat</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 col-sm-6 footer-col">

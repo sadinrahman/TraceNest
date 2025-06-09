@@ -20,7 +20,34 @@
         justify-content: flex-end;
         margin-top: 3vh;
     }
+
+    .item-actions {
+        padding: 10px 15px;
+        border-top: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+
+    .btn-message {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        font-size: 0.875rem;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+        .btn-message:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            color: white;
+        }
+
+        .btn-message i {
+            margin-right: 5px;
+        }
 </style>
+
 <div class="container mt-4 mb-5">
     <div class="header">
         <h1>Found <span>Items</span></h1>
@@ -28,11 +55,9 @@
 
     <div class="search-container">
         <div class="search-input">
-
             <input type="text" class="form-control" id="itemSearchInput" placeholder="Item Name">
         </div>
     </div>
-
 
     <div class="ButtonDiv">
         <button onclick="location.href='@Url.Action("ReportFound", "Found")'" class="btn btn-found" id="button">
@@ -76,8 +101,7 @@
                     {
                         <div class="col-md-6 col-lg-4 mb-4 item-wrapper" data-title="@item.Title.ToLower()">
                             <div class="item-card">
-                               
-                        <div class="item-date ps-2">@item.FoundDate.ToString("MMM d, yyyy")</div>
+                                <div class="item-date ps-2">@item.FoundDate.ToString("MMM d, yyyy")</div>
                                 <div class="item-image">
                                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                                     {
@@ -98,8 +122,18 @@
                                 </div>
                                 <div class="item-info">
                                     <div class="item-title">@item.Title</div>
-                                    <div class="item-location">@item.Municipality </div>
+                                    <div class="item-location">@item.Municipality</div>
                                     <div class="item-description">@item.Description</div>
+                                </div>
+
+                                <!-- Fixed Message Button -->
+                                <div class="item-actions">
+                                    <button class="btn btn-message btn-sm w-100 message-btn"
+                                            data-userid="@item.userid"
+                                            data-itemid="@item.Id">
+                                        <i class="fas fa-comment"></i>
+                                        Message User
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +143,7 @@
                 {
                     <div class="col-12">
                         <div class="alert alert-info">
-                            No lost items found. Please try different search criteria or <a href="@Url.Action("ReportFound", "Found")">report a lost item</a>.
+                            No found items available. Please try different search criteria or <a href="@Url.Action("ReportFound", "Found")">report a found item</a>.
                         </div>
                     </div>
                 }
@@ -120,13 +154,28 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            // Item name search functionality
-            $("#itemSearchInput").on("keyup", function() {
+        $(document).ready(function () {
+            // Search filter
+            $("#itemSearchInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#itemsContainer .item-wrapper").filter(function() {
+                $("#itemsContainer .item-wrapper").filter(function () {
                     $(this).toggle($(this).data("title").indexOf(value) > -1);
                 });
+            });
+
+            // Fixed click handler for message buttons
+            $(document).on("click", ".message-btn", function () {
+                var userId = $(this).data("userid");
+                var itemId = $(this).data("itemid");
+
+                console.log("User ID:", userId, "Item ID:", itemId); // Debug log
+
+                if (userId && userId !== "") {
+                    // Navigate to chat page
+                    window.location.href = '/Chat/Chat?userId=' + encodeURIComponent(userId);
+                } else {
+                    alert("Invalid user ID.");
+                }
             });
         });
     </script>

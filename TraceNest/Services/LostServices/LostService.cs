@@ -51,7 +51,8 @@ namespace TraceNest.Services.LostServices
 					LostDate = item.LostDate,
 					ImageUrl = item.ImageUrl,
 					Municipality = item.Municipality.MunicipalityName,
-					Category = item.Category.CategoryName
+					Category = item.Category.CategoryName,
+					userid = item.UserId
 				});
 			}
 			return result;

@@ -10,5 +10,6 @@
 		public string Municipality { get; set; }
 		public string Status { get; set; }
 		public string Category { get; set; }
+		public Guid userid { get; set; } 
 	}
 }

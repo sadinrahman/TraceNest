@@ -50,8 +50,8 @@ namespace TraceNest.Services.FoundServices
 					FoundDate = item.FoundDate,
 					ImageUrl = item.ImageUrl,
 					Municipality = item.Municipality.MunicipalityName,
-					Category = item.Category.CategoryName
-
+					Category = item.Category.CategoryName,
+					userid= item.UserId
 				});
 			}
 			return result;
