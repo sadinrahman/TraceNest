@@ -1,0 +1,345 @@
+﻿@{
+    ViewData["Title"] = "Chat";
+    var currentUserId = ViewBag.CurrentUserId?.ToString();
+    var receiverId = ViewBag.ReceiverId?.ToString();
+    var receiverName = ViewBag.ReceiverName?.ToString();
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<style>
+    .chat-container {
+        max-width: 600px;
+        margin: 30px auto;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .chat-header {
+        background-color: #0084ff;
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .back-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .chat-messages {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 18px;
+        clear: both;
+        position: relative;
+        word-wrap: break-word;
+    }
+
+    .sent {
+        background-color: #0084ff;
+        color: white;
+        float: right;
+        text-align: right;
+        border-bottom-right-radius: 4px;
+    }
+
+    .received {
+        background-color: #e4e6ea;
+        color: #050505;
+        float: left;
+        text-align: left;
+        border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+        font-size: 11px;
+        opacity: 0.7;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .sent .message-time {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .received .message-time {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .chat-input {
+        display: flex;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        background-color: white;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+            .chat-input input:focus {
+                border-color: #0084ff;
+            }
+
+        .chat-input button {
+            margin-left: 10px;
+            border: none;
+            background-color: #0084ff;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            .chat-input button:hover {
+                background-color: #0066cc;
+            }
+
+            .chat-input button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+
+    .no-messages {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+        font-style: italic;
+    }
+
+    /* Clear floats after messages */
+    .chat-messages::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <button class="back-button" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <span>@receiverName</span>
+        <div></div> <!-- Spacer for flex layout -->
+    </div>
+
+    <div id="chatMessages" class="chat-messages">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Loading messages...
+        </div>
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type your message..." disabled />
+        <button id="sendButton" disabled><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub")
+            .build();
+
+        const currentUserId = "@currentUserId";
+        const receiverId = "@receiverId";
+        let isConnected = false;
+
+        // Start SignalR connection
+        connection.start().then(function () {
+            console.log("SignalR Connected");
+            isConnected = true;
+            enableChatInput();
+            loadMessageHistory();
+        }).catch(function (err) {
+            console.error("SignalR Connection Error:", err.toString());
+            showError("Connection failed. Please refresh the page.");
+        });
+
+        // Load existing message history
+        async function loadMessageHistory() {
+            try {
+                const response = await fetch(`/Chat/GetMessages?userId=${receiverId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to load messages');
+                }
+
+                const messages = await response.json();
+                const chatMessages = document.getElementById("chatMessages");
+                chatMessages.innerHTML = ''; // Clear loading message
+
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = '<div class="no-messages">No messages yet. Start the conversation!</div>';
+                } else {
+                    messages.forEach(message => {
+                        const messageType = message.senderId === currentUserId ? 'sent' : 'received';
+                        renderMessage(message.message, messageType, message.time);
+                    });
+                }
+
+                scrollToBottom();
+            } catch (error) {
+                console.error("Error loading messages:", error);
+                document.getElementById("chatMessages").innerHTML =
+                    '<div class="loading" style="color: #e74c3c;">Failed to load messages. Please refresh the page.</div>';
+            }
+        }
+
+        // Enable chat input when connected
+        function enableChatInput() {
+            document.getElementById("messageInput").disabled = false;
+            document.getElementById("sendButton").disabled = false;
+        }
+
+        // Show error message
+        function showError(message) {
+            document.getElementById("chatMessages").innerHTML =
+                `<div class="loading" style="color: #e74c3c;">${message}</div>`;
+        }
+
+        // Event listeners
+        document.getElementById("sendButton").addEventListener("click", sendMessage);
+        document.getElementById("messageInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Send message function
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value.trim();
+
+            if (message === "" || !isConnected) return;
+
+            // Disable input temporarily
+            messageInput.disabled = true;
+            document.getElementById("sendButton").disabled = true;
+
+            console.log(`Attempting to send message to ${receiverId}: ${message}`);
+
+            connection.invoke("SendPrivateMessage", receiverId, message)
+                .then(function () {
+                    console.log("Message sent successfully");
+                    renderMessage(message, "sent");
+                    messageInput.value = "";
+                    scrollToBottom();
+                })
+                .catch(function (err) {
+                    console.error("Error sending message:", err.toString());
+                    alert("Failed to send message. Please try again.");
+                })
+                .finally(function () {
+                    // Re-enable input
+                    messageInput.disabled = false;
+                    document.getElementById("sendButton").disabled = false;
+                    messageInput.focus();
+                });
+        }
+
+        // Receive message handler
+        connection.on("ReceivePrivateMessage", function (senderId, message) {
+            console.log(`Received message from ${senderId}: ${message}`);
+            if (senderId === receiverId) {
+                renderMessage(message, "received");
+                scrollToBottom();
+            }
+        });
+
+        // Handle message sent confirmation
+        connection.on("MessageSent", function (message) {
+            console.log("Message sent confirmation received");
+        });
+
+        // Handle message errors
+        connection.on("MessageError", function (error) {
+            console.error("Message error:", error);
+            alert("Error: " + error);
+        });
+
+        // Render message in chat
+        function renderMessage(message, type, time = null) {
+            const chatMessages = document.getElementById("chatMessages");
+
+            // Remove "no messages" placeholder if it exists
+            const noMessages = chatMessages.querySelector('.no-messages');
+            if (noMessages) {
+                noMessages.remove();
+            }
+
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${type}`;
+
+            const messageText = document.createElement("div");
+            messageText.textContent = message;
+            messageDiv.appendChild(messageText);
+
+            // Add timestamp
+            const timeDiv = document.createElement("span");
+            timeDiv.className = "message-time";
+            timeDiv.textContent = time || new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            messageDiv.appendChild(timeDiv);
+
+            chatMessages.appendChild(messageDiv);
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            const chatMessages = document.getElementById("chatMessages");
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Handle connection events
+        connection.onclose(function () {
+            isConnected = false;
+            document.getElementById("messageInput").disabled = true;
+            document.getElementById("sendButton").disabled = true;
+            console.log("SignalR Disconnected");
+        });
+
+        connection.onreconnected(function () {
+            isConnected = true;
+            enableChatInput();
+            console.log("SignalR Reconnected");
+        });
+    </script>
+}

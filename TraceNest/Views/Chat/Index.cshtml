@@ -1,0 +1,210 @@
+﻿@* @model List<TraceNest.Dto.ConversationViewModel>
+@{
+    ViewData["Title"] = "Chats";
+}
+
+<div class="conversation-list">
+    <div class="list-header">
+        <h2>Chats</h2>
+    </div>
+
+    <div class="conversations">
+        @foreach (var conversation in Model)
+        {
+            <a href="@Url.Action("Chat", new { userId = conversation.UserId })" class="conversation-item">
+                <div class="user-avatar">
+                    <!-- Placeholder for user avatar -->
+                    <span>@conversation.UserName[0]</span>
+                </div>
+                <div class="conversation-details">
+                    <div class="user-name">@conversation.UserName</div>
+                    <div class="last-message">@conversation.LastMessage</div>
+                </div>
+                <div class="message-time">@conversation.LastMessageTimeDisplay</div>
+            </a>
+        }
+    </div>
+</div>
+
+<style>
+    .conversation-list {
+        max-width: 500px;
+        margin: 0 auto;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .list-header {
+        padding: 15px;
+        background: #f0f2f5;
+        border-bottom: 1px solid #e1e1e1;
+        text-align: center;
+    }
+
+    .conversations {
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+
+    .conversation-item {
+        display: flex;
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        text-decoration: none;
+        color: inherit;
+        align-items: center;
+    }
+
+        .conversation-item:hover {
+            background-color: #f9f9f9;
+        }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #128C7E;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .conversation-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-name {
+        font-weight: bold;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .last-message {
+        color: #666;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-time {
+        color: #666;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+</style> *@
+
+
+
+@model List<TraceNest.Dto.ConversationViewModel>
+@{
+    ViewData["Title"] = "Chats";
+}
+
+<div class="conversation-list">
+    <div class="list-header">
+        <h2>Chats</h2>
+    </div>
+
+    <div class="conversations">
+        @foreach (var conversation in Model)
+        {
+            <a href="@Url.Action("Chat", new { userId = conversation.UserId })" class="conversation-item">
+                <div class="user-avatar">
+                    <span>@conversation.UserName[0]</span>
+                </div>
+                <div class="conversation-details">
+                    <div class="user-name">@conversation.UserName</div>
+                    <div class="last-message">@conversation.LastMessage</div>
+                </div>
+                <div class="message-time">@conversation.LastMessageTimeDisplay</div>
+            </a>
+        }
+    </div>
+</div>
+
+<style>
+    .conversation-list {
+        max-width: 500px;
+        margin: 0 auto;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .list-header {
+        padding: 15px;
+        background: #f0f2f5;
+        border-bottom: 1px solid #e1e1e1;
+        text-align: center;
+    }
+
+    .conversations {
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+
+    .conversation-item {
+        display: flex;
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        text-decoration: none;
+        color: inherit;
+        align-items: center;
+    }
+
+        .conversation-item:hover {
+            background-color: #f9f9f9;
+        }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #128C7E;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .conversation-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-name {
+        font-weight: bold;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .last-message {
+        color: #666;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-time {
+        color: #666;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+</style>

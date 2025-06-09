@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TraceNest.Data;
 using TraceNest.Helper.CloudinaryHelper;
+using TraceNest.Hubs;
 using TraceNest.Repository.AuthRepositories;
 using TraceNest.Repository.CategoryRepositories;
 using TraceNest.Repository.FoundRepositories;
@@ -25,8 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(Options =>
-Options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
+	Options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 
+// Configure JWT Authentication
 builder.Services.AddAuthentication("Bearer")
 	.AddJwtBearer("Bearer", options =>
 	{
@@ -45,17 +48,29 @@ builder.Services.AddAuthentication("Bearer")
 		{
 			OnMessageReceived = context =>
 			{
-				// Read token from cookie named "AuthToken"
+				// Check for token in cookie first
 				var token = context.Request.Cookies["AuthToken"];
 				if (!string.IsNullOrEmpty(token))
 				{
 					context.Token = token;
+					return Task.CompletedTask;
 				}
+
+				// For SignalR connections, check query string
+				var path = context.HttpContext.Request.Path;
+				if (path.StartsWithSegments("/chathub"))
+				{
+					var accessToken = context.Request.Query["access_token"];
+					if (!string.IsNullOrEmpty(accessToken))
+					{
+						context.Token = accessToken;
+					}
+				}
+
 				return Task.CompletedTask;
 			},
 			OnChallenge = context =>
 			{
-				// Prevent redirect to /Account/Login
 				context.HandleResponse();
 				context.Response.StatusCode = 401;
 				return Task.CompletedTask;
@@ -63,11 +78,7 @@ builder.Services.AddAuthentication("Bearer")
 		};
 	});
 
-
-
-
-
-
+// Register your services
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILostRepository, LostRepository>();
@@ -84,28 +95,37 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddSignalR();
-builder.Services.AddControllersWithViews();
+// Configure SignalR with proper authentication
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+builder.Services.AddSignalR(options =>
+{
+	options.EnableDetailedErrors = true; // Enable for debugging
+	options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+	options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+
+// Authentication must come before authorization and hub mapping
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Map SignalR Hub
+app.MapHub<ChatHub>("/chathub");
+
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
